@@ -1,6 +1,4 @@
 import os
-
-from sh import git
 from git import Repo
 
 """
@@ -46,9 +44,7 @@ def find_all_tf_dirs(directories: set[str]):
 repo = Repo(".")
 assert not repo.bare, "Repo has not been initialized. Check configuration."
 
-# Credit: https://stackoverflow.com/a/73583812
-repo_root_dir = git("rev-parse", "--show-toplevel").rstrip()  # Get repo's root directory
-all_files = git("ls-files", repo_root_dir, full_name=True).splitlines()  # List staged files relative to root directory
+all_files = [diff.a_path for diff in repo.index.diff("HEAD")]  # List staged files relative to root directory
 dirs = set([os.path.dirname(f) for f in all_files])  # Get directory names
 dirs.discard("")  # Remove empty path - added by default when using git ls-files
 
