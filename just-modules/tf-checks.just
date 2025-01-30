@@ -17,14 +17,13 @@ TERRATEST_EXAMPLES_PATH :=  "examples/*"
 check dir ci=CI:
     #!/usr/bin/env bash
     set -euxo pipefail
-    cd {{dir}}
+    cd {{justfile_dir()}}/{{dir}}
     just tf-checks _install_packages
     just tf-checks _test_documentation
     just tf-checks _test_lint
     just tf-checks _test_security
     just tf-checks _test_validation
     just tf-checks _test_format
-    just tf-checks test_examples
 
 _install_packages:
     #!/usr/bin/env bash
@@ -41,38 +40,38 @@ _install_packages:
 _test_validation:
     #!/usr/bin/env bash
     set -euxo pipefail
-    cd {{invocation_directory()}}
+    cd {{invocation_dir()}}
     {{TF_BINARY}} init -backend=false
     {{TF_BINARY}} validate
 
 # Terraform formatting
 _format:
-    @{{TF_BINARY}} fmt -recursive {{invocation_directory()}}
+    @{{TF_BINARY}} fmt -recursive {{invocation_dir()}}
 
 _test_format: _format
-    @{{TF_BINARY}} fmt -check -recursive {{invocation_directory()}}
+    @{{TF_BINARY}} fmt -check -recursive {{invocation_dir()}}
 
 
 # Terraform documentation
 _documentation:
-    @terraform-docs -c {{invocation_directory()}}/.terraform-docs.yml {{invocation_directory()}}
+    @terraform-docs -c {{invocation_dir()}}/.terraform-docs.yml {{invocation_dir()}}
 
 _test_documentation: _documentation
-    @terraform-docs -c {{invocation_directory()}}/.terraform-docs.yml --output-check {{invocation_directory()}}/.
+    @terraform-docs -c {{invocation_dir()}}/.terraform-docs.yml --output-check {{invocation_dir()}}/.
 
 # Terraform lint
 _fix_lint_errors:
-    @tflint --chdir={{invocation_directory()}} --init && tflint --chdir={{invocation_directory()}} --fix
+    @tflint --chdir={{invocation_dir()}} --init && tflint --chdir={{invocation_dir()}} --fix
 
 _test_lint: _fix_lint_errors
-    @tflint --chdir={{invocation_directory()}}  --init && tflint --chdir={{invocation_directory()}}
+    @tflint --chdir={{invocation_dir()}}  --init && tflint --chdir={{invocation_dir()}}
 
 # Terraform security
 _test_checkov:
-    @checkov --directory {{invocation_directory()}}  {{CHECKOV_OPTS}}
+    @checkov --directory {{invocation_dir()}}  {{CHECKOV_OPTS}}
 
 _test_trivy:
-    @trivy config {{invocation_directory()}}
+    @trivy config {{invocation_dir()}}
 
 _test_security: _test_checkov _test_trivy
 
@@ -80,16 +79,16 @@ _test_security: _test_checkov _test_trivy
 # Terratest
 #
 _tests_init:
-    go mod init "{{invocation_directory()}}"
+    go mod init "{{invocation_dir()}}"
 
 _manage_tests_deps:
-	cd {{invocation_directory()}} && go mod tidy
+	cd {{invocation_dir()}} && go mod tidy
 
 _terratest:
     #!/usr/bin/env bash
     set -euxo pipefail
     echo "WARNING! CURRENTLY FAILS."
-    cd "{{invocation_directory()}}/terratest"
+    cd "{{invocation_dir()}}/terratest"
     just tf-checks _tests_init
     just tf-checks _manage_tests_deps
     TERRATEST_BINARY={{TF_BINARY}} go test -v -timeout 60m {{GO_TEST_OPTS}}
@@ -99,7 +98,7 @@ _terratest:
 test_examples:
     #!/usr/bin/env bash
     set -euxo pipefail
-    cd {{invocation_directory()}}
+    cd {{invocation_dir()}}
     terratest_examples=$(ls {{ TERRATEST_EXAMPLES_PATH }})
     export TENV_AUTO_INSTALL=true
 

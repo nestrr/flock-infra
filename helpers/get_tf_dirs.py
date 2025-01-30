@@ -41,7 +41,7 @@ def find_all_tf_dirs(directories: set[str]):
     return tf_dirs
 
 
-repo = Repo(".")
+repo = Repo("")
 assert not repo.bare, "Repo has not been initialized. Check configuration."
 
 all_files = [diff.a_path for diff in repo.index.diff("HEAD")]  # List staged files relative to root directory
