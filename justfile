@@ -1,3 +1,3 @@
 # Runs Terraform checks, including formatting, documentation, and testing.
-mod tf-checks
+mod tf-checks "./just-modules/tf-checks.just"
 
