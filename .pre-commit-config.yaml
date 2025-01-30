@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - name: Lint
+        id: lint
+        entry: bash ./run-checks.sh
+        language: system
+        pass_filenames: false
