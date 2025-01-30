@@ -1,0 +1,4 @@
+pre-commit
+GitPython
+sh~=2.2.1
+uv~=0.5.25
