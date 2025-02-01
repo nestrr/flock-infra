@@ -23,13 +23,15 @@ permissions:
   id-token: write
 
 env:
-  TG_VERSION: '1.10.5'
+  TG_VERSION: '0.72.5'
+  TF_VERSION: '1.10.5'
   TG_DIR: 'infra'
   ENVIRONMENT: ${{ inputs.environment }}
   LAYER: ${{ inputs.layer }}
   TERRAGRUNT_IAM_ROLE: ${{ secrets.GH_IAM_ROLE_ARN }}
   TERRAGRUNT_EXCLUDE_DIR: "infra/frontend/modules/oidc"
   TERRAGRUNT_NON_INTERACTIVE: true
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   determine_config:
@@ -49,6 +51,8 @@ jobs:
         uses: gruntwork-io/terragrunt-action@v2
         with:
           tg_version: ${{ env.TG_VERSION }}
+          tf_version: ${{ env.TF_VERSION }}
+          tg_comment: true
           tg_dir: ${{ env.TG_DIR }}
           tg_command: 'run-all plan'
   deploy:
@@ -62,5 +66,7 @@ jobs:
         uses: gruntwork-io/terragrunt-action@v2
         with:
           tg_version: ${{ env.TG_VERSION }}
+          tf_version: ${{ env.TF_VERSION }}
           tg_dir: ${{ env.TG_DIR }}
+          tg_comment: true
           tg_command: 'run-all apply'
