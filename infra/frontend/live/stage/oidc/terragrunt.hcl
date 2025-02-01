@@ -13,7 +13,7 @@ include "root" {
 # Include the common configuration for the component. The common configuration contains settings that are common
 # for the component across all environments.
 include "common" {
-  path = "${dirname(find_in_parent_folders("root.hcl"))}/live/common/oidc.hcl"
+  path = "${dirname(find_in_parent_folders("root.hcl"))}/frontend/live/common/oidc.hcl"
   # We want to reference the variables from the included config in this configuration, so we expose it.
   expose = true
 }
