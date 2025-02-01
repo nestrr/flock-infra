@@ -37,3 +37,6 @@ tfplan*
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Terragrunt
+.terragrunt-cache
