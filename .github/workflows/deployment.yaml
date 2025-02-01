@@ -21,6 +21,7 @@ on:
 
 permissions:
   id-token: write
+  contents: read
 
 env:
   TG_VERSION: '0.72.5'
@@ -46,7 +47,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@main
-
+      - name: Authenticate to AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.GH_IAM_ROLE_ARN }}
+          aws-region: us-east-1
       - name: Plan
         uses: gruntwork-io/terragrunt-action@v2
         with:
@@ -62,6 +67,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
+      - name: Authenticate to AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.GH_IAM_ROLE_ARN }}
+          aws-region: us-east-1
       - name: Deploy
         uses: gruntwork-io/terragrunt-action@v2
         with:
