@@ -1,5 +1,3 @@
-set quiet
-
 TF_ENGINE := "terraform"
 TF_BINARY := if TF_ENGINE == "terraform" { "terraform" } else { "tofu" }
 INSTALLER_PATH := shell('command -v' + ' apt || command -v brew || command -v choco') # command is already first argument
@@ -20,14 +18,15 @@ check dir ci=CI:
     cd {{justfile_dir()}}/{{dir}}
     just tf-checks _install_packages
     just tf-checks _test_documentation
-    just tf-checks _test_lint
+    # just tf-checks _test_lint -- DISABLED: see https://github.com/gruntwork-io/terragrunt/issues/3689
     just tf-checks _test_security
-    just tf-checks _test_validation
+    # just tf-checks _test_validation -- Disabled in favor of Terragrunt validate (TODO: implement)
     just tf-checks _test_format
 
 _install_packages:
     #!/usr/bin/env bash
     set -euxo pipefail
+    echo {{invocation_dir()}}
     if [[ "{{INSTALLER}}" = "choco" ]]; then
         choco install {{CHOCOLATEY_PACKAGES}}
     elif [[ "{{INSTALLER}}" = "brew" ]]; then
@@ -41,7 +40,7 @@ _test_validation:
     #!/usr/bin/env bash
     set -euxo pipefail
     cd {{invocation_dir()}}
-    {{TF_BINARY}} init -backend=false
+    # {{TF_BINARY}} init -backend=false
     {{TF_BINARY}} validate
 
 # Terraform formatting
@@ -107,7 +106,7 @@ test_examples:
             # if we find a directory, test its contents
             echo "Testing examples in $f"
             cd
-            {{TF_BINARY}} init -backend=false
+            # {{TF_BINARY}} init -backend=false
             {{TF_BINARY}} test {{TF_TEST_OPTS}}
         fi
     done
