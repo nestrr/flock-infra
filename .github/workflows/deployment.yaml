@@ -1,0 +1,67 @@
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: The environment (stage or prod).
+        required: true
+        default: "stage"
+        type: choice
+        options:
+          - STAGE
+          - PROD
+      layer:
+        description: The layer of the stack (backend or frontend).
+        required: true
+        default: "frontend"
+        type: choice
+        options:
+          - FRONTEND
+          - BACKEND
+
+permissions:
+  id-token: write
+
+env:
+  TG_VERSION: '1.10.5'
+  TG_DIR: 'infra'
+  ENVIRONMENT: ${{ inputs.environment }}
+  LAYER: ${{ inputs.layer }}
+  TERRAGRUNT_IAM_ROLE: ${{ secrets.GH_IAM_ROLE_ARN }}
+  TERRAGRUNT_EXCLUDE_DIR: "infra/frontend/modules/oidc"
+  TERRAGRUNT_NON_INTERACTIVE: true
+
+jobs:
+  determine_config:
+    runs-on: ubuntu-latest
+    steps:
+      - id: echo_bucket
+        name: Provide the name of the Actions secret that stores the appropriate S3 bucket
+        run: |
+          bucket="TG_S3_$layer_$environment"
+          echo 'TG_BUCKET_PREFIX=secrets[format('TG_S3_{0}_{1}', env.ENVIRONMENT, env.LAYER)]' >> $GITHUB_ENV
+  plan:
+    runs-on: ubuntu-latest
+    needs: [ determine_config ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Plan
+        uses: gruntwork-io/terragrunt-action@v2
+        with:
+          tg_version: ${{ env.TG_VERSION }}
+          tg_dir: ${{ env.TG_DIR }}
+          tg_command: 'run-all plan'
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [ plan ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Deploy
+        uses: gruntwork-io/terragrunt-action@v2
+        with:
+          tg_version: ${{ env.TG_VERSION }}
+          tg_dir: ${{ env.TG_DIR }}
+          tg_command: 'run-all apply'
