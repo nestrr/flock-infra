@@ -29,7 +29,6 @@ env:
   TG_DIR: 'infra'
   ENVIRONMENT: ${{ inputs.environment }}
   LAYER: ${{ inputs.layer }}
-  TERRAGRUNT_IAM_ROLE: ${{ secrets.GH_IAM_ROLE_ARN }}
   TERRAGRUNT_EXCLUDE_DIR: "infra/frontend/modules/oidc"
   TERRAGRUNT_NON_INTERACTIVE: true
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
