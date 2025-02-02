@@ -6,6 +6,8 @@ module "oidc_github" {
   iam_role_inline_policies = {
     "tg_policy" : data.aws_iam_policy_document.iam_policy.json
   }
+  enabled = var.enable_resource_creation
+  create_oidc_provider = var.enable_oidc_provider_creation
 }
 
 data "aws_iam_policy_document" "iam_policy" {
