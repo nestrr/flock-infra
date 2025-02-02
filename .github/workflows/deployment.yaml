@@ -38,11 +38,11 @@ jobs:
   determine_config:
     runs-on: ubuntu-latest
     outputs:
-      bucket: {{ steps.echo_bucket.outputs.bucket }}
+      bucket: ${{ steps.echo_bucket.outputs.bucket }}
     steps:
       - id: echo_bucket
         name: Provide the name of the Actions secret that stores the appropriate S3 bucket
-        run: echo 'bucket=secrets[format('TG_S3_{0}_{1}', env.ENVIRONMENT, env.LAYER)]' >> "$GITHUB_OUTPUT"
+        run: echo "bucket=secrets[format('TG_S3_{0}_{1}', env.ENVIRONMENT, env.LAYER)]" >> "$GITHUB_OUTPUT"
   authenticate:
     runs-on: ubuntu-latest
     outputs:
