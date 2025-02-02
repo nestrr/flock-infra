@@ -1,23 +1,6 @@
 name: Deploy Terragrunt infrastructure
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: The environment (stage or prod).
-        required: true
-        default: "stage"
-        type: choice
-        options:
-          - STAGE
-          - PROD
-      layer:
-        description: The layer of the stack (backend or frontend).
-        required: true
-        default: "frontend"
-        type: choice
-        options:
-          - FRONTEND
-          - BACKEND
+  pull_request:
 
 permissions:
   id-token: write
@@ -26,16 +9,14 @@ permissions:
 env:
   TG_VERSION: '0.72.5'
   TF_VERSION: '1.10.5'
-  ENVIRONMENT: ${{ inputs.environment }}
-  LAYER: ${{ inputs.layer }}
   TERRAGRUNT_EXCLUDE_DIR: "**/*/oidc"
   TERRAGRUNT_NON_INTERACTIVE: true
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  TG_BUCKET_PREFIX: ${{ secrets[format('TG_S3_{0}_{1}', inputs.layer, inputs.environment)] }}
 
 jobs:
   plan:
     runs-on: ubuntu-latest
+    environment: frontend-stage
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -57,8 +38,10 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
+          TG_BUCKET_PREFIX: ${{ secrets.TG_BUCKET_PREFIX }}
   deploy:
     runs-on: ubuntu-latest
+    environment: frontend-stage
     needs: [ plan ]
     steps:
       - name: Checkout
@@ -80,3 +63,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
+          TG_BUCKET_PREFIX: ${{ secrets.TG_BUCKET_PREFIX }}
