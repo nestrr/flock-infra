@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "iam_policy" {
       "dynamodb:*"
     ]
     resources = [
-      "arn:aws:dynamodb:*:*:table/terragrunt*"
+      "arn:aws:dynamodb:*:*:table/tf-locks*"
     ]
   }
   statement {
