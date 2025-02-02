@@ -28,7 +28,7 @@ env:
   TF_VERSION: '1.10.5'
   ENVIRONMENT: ${{ inputs.environment }}
   LAYER: ${{ inputs.layer }}
-  TERRAGRUNT_EXCLUDE_DIR: "infra/frontend/modules/oidc"
+  TERRAGRUNT_EXCLUDE_DIR: "**/*/oidc"
   TERRAGRUNT_NON_INTERACTIVE: true
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   TG_BUCKET_PREFIX: ${{ secrets[format('TG_S3_{0}_{1}', inputs.layer, inputs.environment)] }}
@@ -52,6 +52,7 @@ jobs:
           tg_version: ${{ env.TG_VERSION }}
           tf_version: ${{ env.TF_VERSION }}
           tg_comment: true
+          tg_dir: ${{ env.TG_DIR }}
           tg_command: 'run-all plan'
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
