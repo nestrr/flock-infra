@@ -32,7 +32,7 @@ env:
   TERRAGRUNT_EXCLUDE_DIR: "infra/frontend/modules/oidc"
   TERRAGRUNT_NON_INTERACTIVE: true
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  TG_BUCKET_PREFIX: ${{ secrets[format('TG_S3_{0}_{1}', env.LAYER, env.ENVIRONMENT)] }}
+  TG_BUCKET_PREFIX: ${{ secrets[format('TG_S3_{0}_{1}', inputs.environment, inputs.layer)] }}
 
 jobs:
   plan:
