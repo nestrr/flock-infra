@@ -38,7 +38,7 @@ env:
 jobs:
   plan:
     runs-on: ubuntu-latest
-    environment: ${{ env.ACTIONS_ENVIRONMENT }}
+    environment: ${{ github.env.ACTIONS_ENVIRONMENT }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -64,7 +64,7 @@ jobs:
   deploy:
     if: env.WILL_DEPLOY == 'true'
     runs-on: ubuntu-latest
-    environment: ${{ env.ACTIONS_ENVIRONMENT }}
+    environment: ${{ github.env.ACTIONS_ENVIRONMENT }}
     needs: [ plan ]
     steps:
       - name: Checkout
