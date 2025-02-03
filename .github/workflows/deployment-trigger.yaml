@@ -4,10 +4,10 @@ on:
     branches:
       - main
 
-
 permissions:
   id-token: write
   contents: read
+  pull-requests: write
 
 jobs:
   detect-changed:
@@ -29,17 +29,17 @@ jobs:
         id: changed-files-fe-stage
         uses: tj-actions/changed-files@v45
         with:
-          files: infra/frontend/live/stage/**/**
+          files: 'infra/frontend/live/stage/**'
       - name: Get changed files from frontend-prod
         id: changed-files-fe-prod
         uses: tj-actions/changed-files@v45
         with:
-          files: infra/frontend/live/prod/**/**
+          files: 'infra/frontend/live/prod/**'
       - name: Get changed files common to the frontend
         id: changed-files-fe-common
         uses: tj-actions/changed-files@v45
         with:
-          files: infra/frontend/live/**/**
+          files: 'infra/frontend/live/**'
           files_ignore: |
             infra/frontend/live/stage/**/**
             infra/frontend/live/prod/**/**
@@ -47,24 +47,24 @@ jobs:
         id: changed-files-be-stage
         uses: tj-actions/changed-files@v45
         with:
-          files: infra/backend/live/stage/**/**
+          files: 'infra/backend/live/stage/**/**'
       - name: Get changed files from backend-prod
         id: changed-files-be-prod
         uses: tj-actions/changed-files@v45
         with:
-          files: infra/backend/live/prod/**/**
+          files: 'infra/backend/live/prod/**/**'
       - name: Get changed files common to the backend
         id: changed-files-be-common
         uses: tj-actions/changed-files@v45
         with:
-          files: infra/backend/live/**/**
+          files: 'infra/backend/live/**/**'
           files_ignore: |
             infra/backend/live/stage/**/**
             infra/backend/live/prod/**/**
   trigger-deploy-fe-stage:
-    needs: [ detect-changed ]
+    needs: detect-changed
     name: Trigger frontend-stage-deploy if needed
-    if: needs.jobs.detect-changed.outputs.fe-stage-changes == true || needs.jobs.detect-changed.outputs.fe-common-changes == true
+    if: needs.detect-changed.outputs.fe-stage-changes == 'true' || needs.detect-changed.outputs.fe-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "frontend-stage"
@@ -72,9 +72,9 @@ jobs:
       # deploy: true
     secrets: inherit
   trigger-deploy-fe-prod:
-    needs: [ detect-changed ]
+    needs: detect-changed
     name: Trigger frontend-stage-deploy if needed
-    if: needs.jobs.detect-changed.outputs.fe-prod-changes == true || needs.jobs.detect-changed.outputs.fe-common-changes == true
+    if: needs.detect-changed.outputs.fe-prod-changes == 'true' || needs.detect-changed.outputs.fe-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "frontend-prod"
@@ -82,9 +82,9 @@ jobs:
       # deploy: true
     secrets: inherit
   trigger-deploy-be-stage:
-    needs: [ detect-changed ]
+    needs: detect-changed
     name: Trigger backend-stage-deploy if needed
-    if: needs.jobs.detect-changed.outputs.be-stage-changes == true || needs.jobs.detect-changed.outputs.be-common-changes == true
+    if: needs.detect-changed.outputs.be-stage-changes == 'true' || needs.detect-changed.outputs.be-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "backend-stage"
@@ -92,9 +92,9 @@ jobs:
       # deploy: true
     secrets: inherit
   trigger-deploy-be-prod:
-    needs: [ detect-changed ]
+    needs: detect-changed
     name: Trigger backend-stage-deploy if needed
-    if: needs.jobs.detect-changed.outputs.be-prod-changes == true || needs.jobs.detect-changed.outputs.be-common-changes == true
+    if: needs.detect-changed.outputs.be-prod-changes == 'true' || needs.detect-changed.outputs.be-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "backend-prod"
