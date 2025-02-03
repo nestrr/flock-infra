@@ -4,8 +4,8 @@ variable "doppler_personal_token" {
   sensitive   = true
   default     = ""
 }
-variable "doppler_service_token_secret_name" {
-  description = "This is the name of the Doppler service token secret in AWS SM"
+variable "service_token_slug" {
+  description = "This is the slug of the Doppler service token, used both in AWS SM and Doppler"
   type = string
 }
 variable "project" {
