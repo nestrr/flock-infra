@@ -14,7 +14,7 @@ on:
         description: 'Any Terragrunt directories to exclude, passed from the caller workflow. If a relative path is specified, it should be relative from the working directory.'
         required: false
         type: string
-        default: ""
+        default: ''
       deploy:
         description: 'Whether to deploy the infrastructure or not, passed from the caller workflow'
         required: false
@@ -29,7 +29,7 @@ env:
   TG_VERSION: '0.72.5'
   TF_VERSION: '1.10.5'
   ACTIONS_ENVIRONMENT: ${{ inputs.actions_environment }}
-  TERRAGRUNT_EXCLUDE_DIR: ${{ inputs.tg_exclude_dir != "" && format("**/*/oidc, {0}", inputs.tg_exclude_dir) || "**/*/oidc" }} # excluded because it only needs to run once (to set up OIDC provider for Actions to authenticate to AWS)
+  TERRAGRUNT_EXCLUDE_DIR: ${{ inputs.tg_exclude_dir != '' && format('**/*/oidc, {0}', inputs.tg_exclude_dir) || '**/*/oidc' }} # excluded because it only needs to run once (to set up OIDC provider for Actions to authenticate to AWS)
   TERRAGRUNT_WORKING_DIR: ${{ inputs.tg_working_dir }}
   TERRAGRUNT_NON_INTERACTIVE: true
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
