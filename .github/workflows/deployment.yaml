@@ -55,7 +55,7 @@ jobs:
         with:
           tg_version: ${{ env.TG_VERSION }}
           tf_version: ${{ env.TF_VERSION }}
-          tg_comment: 1
+          tg_comment: '1'
           tg_command: 'run-all plan'
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
@@ -81,7 +81,7 @@ jobs:
         with:
           tg_version: ${{ env.TG_VERSION }}
           tf_version: ${{ env.TF_VERSION }}
-          tg_comment: 1
+          tg_comment: '1'
           tg_command: 'run-all apply'
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
