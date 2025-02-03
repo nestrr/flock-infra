@@ -68,7 +68,7 @@ jobs:
     uses: nestrr/flock-infra/.github/workflows/deployment.yaml@deployment-fix
     with:
       actions_environment: "frontend-stage"
-      tg_working_dir: "infra/frontend/live/stage"
+      tg_include_dir: "infra/frontend/live/stage"
       # deploy: true
     secrets: inherit
   trigger-deploy-fe-prod:
