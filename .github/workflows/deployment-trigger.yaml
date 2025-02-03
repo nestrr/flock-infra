@@ -7,6 +7,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  pull-requests: write
 
 jobs:
   detect-changed:
@@ -70,7 +71,7 @@ jobs:
   test-detect-output:
     name: Test that we are getting detect-changed output correctly
     runs-on: ubuntu-latest
-    needs: [ detect-changed ]
+    needs: detect-changed
     steps:
       - name: Test that we are getting changed files accurately
         id: test
