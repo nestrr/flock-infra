@@ -19,7 +19,6 @@ jobs:
       be-stage-changes: ${{ steps.changed-files-be-stage.outputs.any_changed }}
       be-prod-changes: ${{ steps.changed-files-be-prod.outputs.any_changed }}
       be-common-changes: ${{ steps.changed-files-be-common.outputs.any_changed }}
-      test-changes: ${{ steps.output-compile.outputs.fe_stage_changes }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -62,28 +61,10 @@ jobs:
           files_ignore: |
             infra/backend/live/stage/**/**
             infra/backend/live/prod/**/**
-      - name: Compile Github output
-        id: output-compile
-        run:  | 
-          echo "fe_stage_changes=${{ steps.changed-files-fe-stage.outputs.any_changed }}" >> "$GITHUB_OUTPUT"
-          echo ${{ steps.changed-files-fe-prod.outputs.any_changed }}
-          echo ${{ steps.changed-files-fe-common.outputs.any_changed }}
-  test-detect-output:
-    name: Test that we are getting detect-changed output correctly
-    runs-on: ubuntu-latest
-    needs: detect-changed
-    steps:
-      - name: Test that we are getting changed files accurately
-        id: test
-        run: |
-          echo ${{ needs.detect-changed.outputs.fe-stage-changes }}
-          echo ${{ needs.detect-changed.outputs.fe-stage-changes == true }}
-          echo ${{ needs.detect-changed.outputs.test-changes }}
-          echo ${{ needs.detect-changed.outputs.test-changes == true }}
   trigger-deploy-fe-stage:
-    needs: [ detect-changed ]
+    needs: detect-changed
     name: Trigger frontend-stage-deploy if needed
-    if: needs.jobs.detect-changed.outputs.fe-stage-changes == true || needs.jobs.detect-changed.outputs.fe-common-changes == true
+    if: needs.detect-changed.outputs.fe-stage-changes == 'true' || needs.detect-changed.outputs.fe-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "frontend-stage"
@@ -91,9 +72,9 @@ jobs:
       # deploy: true
     secrets: inherit
   trigger-deploy-fe-prod:
-    needs: [ detect-changed ]
+    needs: detect-changed
     name: Trigger frontend-stage-deploy if needed
-    if: needs.jobs.detect-changed.outputs.fe-prod-changes == true || needs.jobs.detect-changed.outputs.fe-common-changes == true
+    if: needs.detect-changed.outputs.fe-prod-changes == 'true' || needs.detect-changed.outputs.fe-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "frontend-prod"
@@ -101,9 +82,9 @@ jobs:
       # deploy: true
     secrets: inherit
   trigger-deploy-be-stage:
-    needs: [ detect-changed ]
+    needs: detect-changed
     name: Trigger backend-stage-deploy if needed
-    if: needs.jobs.detect-changed.outputs.be-stage-changes == true || needs.jobs.detect-changed.outputs.be-common-changes == true
+    if: needs.detect-changed.outputs.be-stage-changes == 'true' || needs.detect-changed.outputs.be-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "backend-stage"
@@ -111,9 +92,9 @@ jobs:
       # deploy: true
     secrets: inherit
   trigger-deploy-be-prod:
-    needs: [ detect-changed ]
+    needs: detect-changed
     name: Trigger backend-stage-deploy if needed
-    if: needs.jobs.detect-changed.outputs.be-prod-changes == true || needs.jobs.detect-changed.outputs.be-common-changes == true
+    if: needs.detect-changed.outputs.be-prod-changes == 'true' || needs.detect-changed.outputs.be-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "backend-prod"
