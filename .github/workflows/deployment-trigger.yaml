@@ -76,10 +76,10 @@ jobs:
       - name: Test that we are getting changed files accurately
         id: test
         run: |
-          echo ${{ needs.jobs.detect-changed.outputs.fe-stage-changes }}
-          echo ${{ needs.jobs.detect-changed.outputs.fe-stage-changes == true }}
-          echo ${{ needs.jobs.detect-changed.outputs.test-changes }}
-          echo ${{ needs.jobs.detect-changed.outputs.test-changes == true }}
+          echo ${{ needs.detect-changed.outputs.fe-stage-changes }}
+          echo ${{ needs.detect-changed.outputs.fe-stage-changes == true }}
+          echo ${{ needs.detect-changed.outputs.test-changes }}
+          echo ${{ needs.detect-changed.outputs.test-changes == true }}
   trigger-deploy-fe-stage:
     needs: [ detect-changed ]
     name: Trigger frontend-stage-deploy if needed
