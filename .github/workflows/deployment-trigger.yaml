@@ -1,0 +1,103 @@
+name: Trigger Terragrunt infrastructure deployment
+on:
+  pull_request:
+    branches:
+      - main
+
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  detect-changed:
+    runs-on: ubuntu-latest
+    outputs:
+      fe-stage-changes: ${{ steps.changed-files-fe-stage.outputs.any_changed }}
+      fe-prod-changes: ${{ steps.changed-files-fe-prod.outputs.any_changed }}
+      fe-common-changes: ${{ steps.changed-files-fe-common.outputs.any_changed }}
+      be-stage-changes: ${{ steps.changed-files-be-stage.outputs.any_changed }}
+      be-prod-changes: ${{ steps.changed-files-be-prod.outputs.any_changed }}
+      be-common-changes: ${{ steps.changed-files-be-common.outputs.any_changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      # Not including modules directories here, because Terragrunt units lock down the module version used
+      # So if a module changes, it will only affect infrastructure if one of the units are changed - which would be caught here
+      - name: Get changed files from frontend-stage
+        id: changed-files-fe-stage
+        uses: tj-actions/changed-files@v45
+        with:
+          files: infra/frontend/live/stage/**/**
+      - name: Get changed files from frontend-prod
+        id: changed-files-fe-prod
+        uses: tj-actions/changed-files@v45
+        with:
+          files: infra/frontend/live/prod/**/**
+      - name: Get changed files common to the frontend
+        id: changed-files-fe-common
+        uses: tj-actions/changed-files@v45
+        with:
+          files: infra/frontend/live/**/**
+          files_ignore: |
+            infra/frontend/live/stage/**/**
+            infra/frontend/live/prod/**/**
+      - name: Get changed files from backend-stage
+        id: changed-files-be-stage
+        uses: tj-actions/changed-files@v45
+        with:
+          files: infra/backend/live/stage/**/**
+      - name: Get changed files from backend-prod
+        id: changed-files-be-prod
+        uses: tj-actions/changed-files@v45
+        with:
+          files: infra/backend/live/prod/**/**
+      - name: Get changed files common to the backend
+        id: changed-files-be-common
+        uses: tj-actions/changed-files@v45
+        with:
+          files: infra/backend/live/**/**
+          files_ignore: |
+            infra/backend/live/stage/**/**
+            infra/backend/live/prod/**/**
+  trigger-deploy-fe-stage:
+    needs: [ detect_changed ]
+    name: Trigger frontend-stage-deploy if needed
+    if: needs.jobs.detect_changed.outputs.fe-stage-changes == "true" || needs.jobs.detect_changed.outputs.fe-common-changes == "true"
+    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
+    with:
+      actions_environment: "frontend-stage"
+      tg_working_dir: "infra/frontend/live/stage"
+      # deploy: true
+    secrets: inherit
+  trigger-deploy-fe-prod:
+    needs: [ detect_changed ]
+    name: Trigger frontend-stage-deploy if needed
+    if: needs.jobs.detect_changed.outputs.fe-prod-changes == "true" || needs.jobs.detect_changed.outputs.fe-common-changes == "true"
+    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
+    with:
+      actions_environment: "frontend-prod"
+      tg_working_dir: "infra/frontend/live/prod"
+      # deploy: true
+    secrets: inherit
+  trigger-deploy-be-stage:
+    needs: [ detect_changed ]
+    name: Trigger backend-stage-deploy if needed
+    if: needs.jobs.detect_changed.outputs.be-stage-changes == "true" || needs.jobs.detect_changed.outputs.be-common-changes == "true"
+    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
+    with:
+      actions_environment: "backend-stage"
+      tg_working_dir: "infra/backend/live/stage"
+      # deploy: true
+    secrets: inherit
+  trigger-deploy-be-prod:
+    needs: [ detect_changed ]
+    name: Trigger backend-stage-deploy if needed
+    if: needs.jobs.detect_changed.outputs.be-prod-changes == "true" || needs.jobs.detect_changed.outputs.be-common-changes == "true"
+    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
+    with:
+      actions_environment: "backend-prod"
+      tg_working_dir: "infra/backend/live/prod"
+      # deploy: true
+    secrets: inherit
