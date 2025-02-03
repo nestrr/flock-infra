@@ -62,7 +62,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
           TG_BUCKET_PREFIX: ${{ secrets.TG_BUCKET_PREFIX }}
   deploy:
-    if: github.env.WILL_DEPLOY == 'true'
+    if: github.env.WILL_DEPLOY == true
     runs-on: ubuntu-latest
     environment: ${{ github.env.ACTIONS_ENVIRONMENT }}
     needs: [ plan ]
