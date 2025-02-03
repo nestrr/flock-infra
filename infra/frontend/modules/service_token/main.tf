@@ -3,7 +3,7 @@ data "aws_caller_identity" "self" {}
 resource "doppler_service_token" "ci_service_token" {
   project = var.project
   config  = var.config
-  name    = format("Service_Token_%s_%s_%s---%s", var.project, var.config, timestamp(), uuid())
+  name    = format("Service_Token_%s-%s", var.service_token_slug, timestamp())
   access  = "read"
 
   lifecycle {
@@ -43,8 +43,8 @@ resource "aws_kms_key_policy" "cmk_admin_policy" {
 
 resource "aws_secretsmanager_secret" "doppler_service_token_secret" {
   #  count=provider::assert::expired(timeadd(existing_doppler_token.tags.created.not_after, "336h"))
-  # resulting name will resemble "DOPPLER-TOKEN_flock-frontend_dev"
-  name        = format("DOPPLER-ST_%s_%s", var.project, var.config)
+  # resulting name will resemble "DOPPLER-TOKEN_provided-slug"
+  name        = format("DOPPLER-ST_%s", var.service_token_slug)
   description = "Doppler Service Token"
   kms_key_id  = aws_kms_key.cmk.key_id
   tags = {
