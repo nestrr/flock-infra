@@ -65,7 +65,7 @@ jobs:
     needs: detect-changed
     name: Trigger frontend-stage-deploy if needed
     if: needs.detect-changed.outputs.fe-stage-changes == 'true' || needs.detect-changed.outputs.fe-common-changes == 'true'
-    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@deployment-fix
+    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "frontend-stage"
       tg_include_dir: "infra/frontend/live/stage"
@@ -75,7 +75,7 @@ jobs:
     needs: detect-changed
     name: Trigger frontend-stage-deploy if needed
     if: needs.detect-changed.outputs.fe-prod-changes == 'true' || needs.detect-changed.outputs.fe-common-changes == 'true'
-    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@deployment-fix
+    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "frontend-prod"
       tg_include_dir: "infra/frontend/live/prod"
@@ -85,7 +85,7 @@ jobs:
     needs: detect-changed
     name: Trigger backend-stage-deploy if needed
     if: needs.detect-changed.outputs.be-stage-changes == 'true' || needs.detect-changed.outputs.be-common-changes == 'true'
-    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@deployment-fix
+    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "backend-stage"
       tg_include_dir: "infra/backend/live/stage"
@@ -95,7 +95,7 @@ jobs:
     needs: detect-changed
     name: Trigger backend-stage-deploy if needed
     if: needs.detect-changed.outputs.be-prod-changes == 'true' || needs.detect-changed.outputs.be-common-changes == 'true'
-    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@deployment-fix
+    uses: nestrr/flock-infra/.github/workflows/deployment.yaml@main
     with:
       actions_environment: "backend-prod"
       tg_include_dir: "infra/backend/live/prod"
