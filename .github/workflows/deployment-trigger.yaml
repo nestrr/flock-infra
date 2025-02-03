@@ -60,6 +60,9 @@ jobs:
           files_ignore: |
             infra/backend/live/stage/**/**
             infra/backend/live/prod/**/**
+      - name: Check Github output
+        id: output-check
+        run: echo "$GITHUB_OUTPUT"
   test-detect-output:
     name: Test that we are getting detect-changed output correctly
     runs-on: ubuntu-latest
