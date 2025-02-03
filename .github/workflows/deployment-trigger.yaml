@@ -60,12 +60,16 @@ jobs:
           files_ignore: |
             infra/backend/live/stage/**/**
             infra/backend/live/prod/**/**
+  test-detect-output:
+    name: Test that we are getting detect-changed output correctly
+    runs-on: ubuntu-latest
+    needs: [ detect-changed ]
+    steps:
       - name: Test that we are getting changed files accurately
         id: test
-        run: | 
-          echo ${{ steps.changed-files-fe-stage.outputs.any_changed }}
-          echo ${{ steps.changed-files-fe-prod.outputs.any_changed }}
-          echo ${{ steps.changed-files-fe-common.outputs.any_changed }}
+        run: |
+          echo ${{ needs.jobs.detect-changed.outputs.fe-stage-changes == true }}
+          echo ${{ jobs.detect-changed.outputs.fe-stage-changes == true }}
   trigger-deploy-fe-stage:
     needs: [ detect-changed ]
     name: Trigger frontend-stage-deploy if needed
