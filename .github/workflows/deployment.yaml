@@ -20,6 +20,17 @@ on:
         required: false
         type: boolean
         default: false
+      plan_flags:
+        description: 'Additional flags to pass Terragrunt plan'
+        required: false
+        type: string
+        default: ''
+      apply_flags:
+        description: 'Additional flags to pass Terragrunt apply'
+        required: false
+        type: string
+        default: ''
+
 
 permissions:
   id-token: write
@@ -34,6 +45,8 @@ env:
   TERRAGRUNT_NON_INTERACTIVE: true
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   WILL_DEPLOY: ${{ inputs.deploy }}
+  PLAN_FLAGS: ${{ inputs.plan_flags }}
+  APPLY_FLAGS: ${{ inputs.apply_flags }}
 
 jobs:
   plan:
@@ -55,7 +68,7 @@ jobs:
           tg_version: ${{ env.TG_VERSION }}
           tf_version: ${{ env.TF_VERSION }}
           tg_comment: true
-          tg_command: 'run-all plan'
+          tg_command: format('run-all {0} plan', env.PLAN_FLAGS)
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
@@ -81,7 +94,7 @@ jobs:
           tg_version: ${{ env.TG_VERSION }}
           tf_version: ${{ env.TF_VERSION }}
           tg_comment: true
-          tg_command: 'run-all apply'
+          tg_command: format('run-all {0} apply', env.APPLY_FLAGS)
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
