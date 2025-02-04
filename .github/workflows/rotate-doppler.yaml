@@ -1,0 +1,26 @@
+name: Rotate Doppler token
+on:
+  workflow_dispatch:
+    inputs:
+      layer:
+        description: 'The layer (frontend or backend)'
+        required: true
+        type: string
+      env_config:
+        description: 'The environment config (stage or prod)'
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  rotate:
+    name: Rotate token
+    uses: nestrr/flock-infra/.github/workflows/deploy.yaml@main
+    with:
+      actions_environment: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
+      tg_include_dir: ${{ format('infra/{0}/live/{1}/service_token', inputs.layer, inputs.env_config) }}
+      apply_flags: '--feature modify_service_token=true'
+    secrets: inherit
