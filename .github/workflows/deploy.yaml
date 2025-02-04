@@ -1,0 +1,68 @@
+name: Deploy Terragrunt infrastructure
+on:
+  workflow_call:
+    inputs:
+      actions_environment:
+        description: 'The environment in GitHub Actions, passed from the caller workflow'
+        required: true
+        type: string
+      tg_include_dir:
+        description: 'The Terragrunt directories to include, passed from the caller workflow'
+        required: true
+        type: string
+      tg_exclude_dir:
+        description: 'Any Terragrunt directories to exclude, passed from the caller workflow. If a relative path is specified, it should be relative from the working directory.'
+        required: false
+        type: string
+        default: ''
+      deploy:
+        description: 'Whether to deploy the infrastructure or not, passed from the caller workflow'
+        required: false
+        type: boolean
+        default: false
+      apply_flags:
+        description: 'Additional flags to pass Terragrunt apply'
+        required: false
+        type: string
+        default: ''
+
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  TG_VERSION: '0.72.5'
+  TF_VERSION: '1.10.5'
+  ACTIONS_ENVIRONMENT: ${{ inputs.actions_environment }}
+  TERRAGRUNT_EXCLUDE_DIR: ${{ inputs.tg_exclude_dir != '' && format('**/*/oidc, {0}', inputs.tg_exclude_dir) || '**/*/oidc' }} # excluded because it only needs to run once (to set up OIDC provider for Actions to authenticate to AWS)
+  TERRAGRUNT_INCLUDE_DIR: ${{ inputs.tg_include_dir }}
+  TERRAGRUNT_NON_INTERACTIVE: true
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  APPLY_FLAGS: ${{ inputs.apply_flags }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.env.ACTIONS_ENVIRONMENT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Authenticate to AWS
+        id: creds
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume:  ${{ secrets.GH_IAM_ROLE_ARN }}
+          output-credentials: true
+      - name: Deploy
+        uses: gruntwork-io/terragrunt-action@v2
+        with:
+          tg_version: ${{ env.TG_VERSION }}
+          tf_version: ${{ env.TF_VERSION }}
+          tg_comment: true
+          tg_command: format('run-all {0} apply', env.APPLY_FLAGS)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
+          AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
+          TG_BUCKET_PREFIX: ${{ secrets.TG_BUCKET_PREFIX }}

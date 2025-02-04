@@ -1,4 +1,4 @@
-name: Deploy Terragrunt infrastructure
+name: Plan Terragrunt infrastructure
 on:
   workflow_call:
     inputs:
@@ -15,18 +15,8 @@ on:
         required: false
         type: string
         default: ''
-      deploy:
-        description: 'Whether to deploy the infrastructure or not, passed from the caller workflow'
-        required: false
-        type: boolean
-        default: false
       plan_flags:
         description: 'Additional flags to pass Terragrunt plan'
-        required: false
-        type: string
-        default: ''
-      apply_flags:
-        description: 'Additional flags to pass Terragrunt apply'
         required: false
         type: string
         default: ''
@@ -44,9 +34,7 @@ env:
   TERRAGRUNT_INCLUDE_DIR: ${{ inputs.tg_include_dir }}
   TERRAGRUNT_NON_INTERACTIVE: true
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  WILL_DEPLOY: ${{ inputs.deploy }}
   PLAN_FLAGS: ${{ inputs.plan_flags }}
-  APPLY_FLAGS: ${{ inputs.apply_flags }}
 
 jobs:
   plan:
@@ -68,33 +56,7 @@ jobs:
           tg_version: ${{ env.TG_VERSION }}
           tf_version: ${{ env.TF_VERSION }}
           tg_comment: true
-          tg_command: ${{ format('run-all {0} plan', env.PLAN_FLAGS) }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
-          AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
-          TG_BUCKET_PREFIX: ${{ secrets.TG_BUCKET_PREFIX }}
-  deploy:
-    if: github.env.WILL_DEPLOY == true
-    runs-on: ubuntu-latest
-    environment: ${{ github.env.ACTIONS_ENVIRONMENT }}
-    needs: [ plan ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Authenticate to AWS
-        id: creds
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-east-1
-          role-to-assume:  ${{ secrets.GH_IAM_ROLE_ARN }}
-          output-credentials: true
-      - name: Deploy
-        uses: gruntwork-io/terragrunt-action@v2
-        with:
-          tg_version: ${{ env.TG_VERSION }}
-          tf_version: ${{ env.TF_VERSION }}
-          tg_comment: true
-          tg_command: ${{ format('run-all {0} apply', env.APPLY_FLAGS) }}
+          tg_command: format('run-all {0} plan', env.PLAN_FLAGS)
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
