@@ -36,8 +36,6 @@ env:
 
 jobs:
   set-tag:
-    permissions:
-      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +49,6 @@ jobs:
           TAG_CONTEXT: branch
   plan:
     permissions:
-      id-token: write
       contents: read
     runs-on: ubuntu-latest
     needs: [ set-tag ]
