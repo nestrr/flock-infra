@@ -22,9 +22,7 @@ on:
         default: ''
 
 
-permissions:
-  id-token: write
-  contents: read
+
 
 env:
   TG_VERSION: '0.72.5'
@@ -51,6 +49,9 @@ jobs:
           CUSTOM_TAG: plan
           TAG_CONTEXT: branch
   plan:
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     needs: [ set-tag ]
     environment: ${{ inputs.actions_environment }}
