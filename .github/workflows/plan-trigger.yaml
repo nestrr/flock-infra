@@ -70,7 +70,7 @@ jobs:
     needs: detect-changed
     name: Trigger frontend-stage plan if needed
     if: needs.detect-changed.outputs.fe-stage-changes == 'true' || needs.detect-changed.outputs.fe-common-changes == 'true'
-    uses: nestrr/flock-infra/.github/workflows/plan.yaml@main
+    uses: nestrr/flock-infra/.github/workflows/plan.yaml@test-branch
     with:
       actions_environment: "frontend-stage"
       tg_include_dir: "infra/frontend/live/stage"
@@ -80,7 +80,7 @@ jobs:
     needs: detect-changed
     name: Trigger frontend-prod plan if needed
     if: needs.detect-changed.outputs.fe-prod-changes == 'true' || needs.detect-changed.outputs.fe-common-changes == 'true'
-    uses: nestrr/flock-infra/.github/workflows/plan.yaml@main
+    uses: nestrr/flock-infra/.github/workflows/plan.yaml@test-branch
     with:
       actions_environment: "frontend-prod"
       tg_include_dir: "infra/frontend/live/prod"
@@ -90,7 +90,7 @@ jobs:
     needs: detect-changed
     name: Trigger backend-stage plan if needed
     if: needs.detect-changed.outputs.be-stage-changes == 'true' || needs.detect-changed.outputs.be-common-changes == 'true'
-    uses: nestrr/flock-infra/.github/workflows/plan.yaml@main
+    uses: nestrr/flock-infra/.github/workflows/plan.yaml@test-branch
     with:
       actions_environment: "backend-stage"
       tg_include_dir: "infra/backend/live/stage"
