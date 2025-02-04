@@ -1,0 +1,46 @@
+# This file is maintained automatically by "terraform init".
+# Manual edits may be lost in future updates.
+
+provider "registry.terraform.io/dopplerhq/doppler" {
+  version     = "1.13.0"
+  constraints = "~> 1.13.0"
+  hashes = [
+    "h1:aZYITIkiL1/4JZlkyznXekp8Cr/i4FRrMr1GFY7psO8=",
+    "zh:07f501e4d90b63e044afba3959914db6ee6a318b431400b573a948e19ee93f6c",
+    "zh:0a8e15619065b87067a16d440033f1f3fdb97e872e2bebc91620a5b7a66ed558",
+    "zh:18029f97da036fd8d3ad3bb920802eabdd674f5462a56135c14ae3818bb5fa7c",
+    "zh:38da813b6311afe2f1615ac0f6171cf466cac149c1dea4a82ea434c9cc7cc0e7",
+    "zh:4499eb18120f2d44f8e3bd8229845d6184380323d6b91dc58ca99195ba0c7f9b",
+    "zh:5ba79177b58f6f019ee5b3cce78cdc90295e155df593aeb2d9220565f8d78eb5",
+    "zh:9d8c4dbcaba45e98ae6cfa40d847b0c1fe97ced6c40a474d08e50405189cc113",
+    "zh:a727f65bec2213855309e1aa79e2ebfa6620d3f2830dd61e15b5c7e8645a7c9a",
+    "zh:c0941606cd655bb3165b51efb594205517b422d8ca2b75caad41e0917447401e",
+    "zh:c5d9d2d55f5b77fc2cfcc8d3bca53d9bf5288f590d192132be7d37a34f0b419d",
+    "zh:c95ed84df0f6aa822f8b0c6b12b80d94ab569bc4bca2b7f7c4e9fd7c24d3f0ab",
+    "zh:cd05ac90242566ced97fbd52a84f3619dae4c89b085699c088d7f34c5841f350",
+    "zh:d1c92443af7a7a7299081a91c4a8236f639b5270567683bde02db4311f99eb0f",
+    "zh:e9da7c0de47969de83d3328add356307a2d3eb871392b87c7de96d25d67087ef",
+  ]
+}
+
+provider "registry.terraform.io/hashicorp/aws" {
+  version = "5.85.0"
+  hashes = [
+    "h1:VQKf997wuPoP0TFxUJ0P+nXkJx97FcoqCZEaGOZBqI4=",
+    "zh:047bfefb24b64de7fdac48d85ab0950591c96092ca093d530cc61a54ffbb0f21",
+    "zh:1c459bab3e99fc760ddb57b935965888c38ebff032b451927a277c00a60f382c",
+    "zh:568df3a039ae4ca3a0e9591a4b3dbc3a23b8efeee8cd64e0abf860aa03b0630b",
+    "zh:7463d353c8c47030a7489238e53b9ef86ebbf4b8ce0628d6b0b293795fc85c50",
+    "zh:7639c24e110aec4145a792238c86aa1b70881e1dedfc2b51ca12d32f92fc3a9d",
+    "zh:893c8a8542c2cec74168094d9f8cc05e6cfadc02d9be2ee63c6564b00c4d608c",
+    "zh:8e0f0c3352b6099e2e44fd5c644f9a27830207c667c45b56a103f756a5731828",
+    "zh:9b12af85486a96aedd8d7984b0ff811a4b42e3d88dad1a3fb4c0b580d04fa425",
+    "zh:9f138a702f568cc891ab377a32d1baaf5b3baa93f80e50a0e36dfd642b1a15a4",
+    "zh:c1e1752ef5d8539e400e297f78a83ddf3d888a40139e48abfbb92d561b524981",
+    "zh:ce7af121ba5587925ce488d7514269fcab3f77562e9d10195e16359b1be3cf00",
+    "zh:d78df6b63765f3829f0fc664ca9be3bbcbe3a0b5c072c8b81b259b55530f2d52",
+    "zh:e14a5f0a5091eb20583763a2e4a75191de0355edf98aaab2904d487124e05877",
+    "zh:eb893b3c2cc3fc26db278ed9fff10c1c5a1bcdf40b37fe44f6073f79d1a93031",
+    "zh:f741f29f4d1a570a6ccbf5e139747d417177bc7cd00f039ca657d81d456e304e",
+  ]
+}
