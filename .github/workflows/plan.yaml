@@ -39,18 +39,17 @@ jobs:
   set-tag:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
       - name: Set tag for this PR to be able to access environment secrets
         uses: anothrNick/github-tag-action@v1
         env:
           CUSTOM_TAG: plan
   plan:
+    needs: set-tag
     runs-on: ubuntu-latest
     environment: ${{ inputs.actions_environment }}
-    steps:
-      - name: Set tag for this PR to be able to access environment secrets
-        uses: anothrNick/github-tag-action@v1
-        env:
-          CUSTOM_TAG: plan
       - name: Checkout
         uses: actions/checkout@main
       - name: Authenticate to AWS
