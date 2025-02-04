@@ -17,7 +17,7 @@ generate "provider" {
   contents  = <<EOF
 provider "doppler" {
   alias = "personal"
-  doppler_token = "${get_env("DOPPLER_PT")}"
+  doppler_token = "${get_env("DOPPLER_PT", "")}"
 }
 EOF
 }

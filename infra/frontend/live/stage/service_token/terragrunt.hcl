@@ -26,7 +26,7 @@ feature "modify_service_token" {
 # Configure the version of the module to use in this environment. This allows you to promote new versions one
 # environment at a time (e.g., qa -> stage -> prod).
 terraform {
-  source = "${include.common.locals.base_source_url}?ref=v0.1.0-beta.18"
+  source = "${include.common.locals.base_source_url}?ref=v0.1.0-beta.19"
   before_hook "prevent_mod_token" {
     commands = ["apply", "destroy", "plan"]
     execute  = feature.modify_service_token.value ? ["bash", "-c", "echo 'Modifying service token.'"] : ["bash", "-c", "echo 'Modifying service token is skipped, as modify_service_token feature is set to false.' && exit 1"]
