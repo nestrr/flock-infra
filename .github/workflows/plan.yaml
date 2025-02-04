@@ -50,6 +50,7 @@ jobs:
     needs: set-tag
     runs-on: ubuntu-latest
     environment: ${{ inputs.actions_environment }}
+    steps:
       - name: Checkout
         uses: actions/checkout@main
       - name: Authenticate to AWS
