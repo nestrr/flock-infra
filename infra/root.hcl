@@ -22,12 +22,23 @@ locals {
 
 
 # Generate an AWS provider block
-generate "provider" {
-  path      = "provider.tf"
+generate "providers" {
+  path      = "root_providers.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
+terraform {
+  required_providers {
+    doppler = {
+      source = "DopplerHQ/doppler"
+      version = "~> 1.13.0"
+    }
+  }
+}
 provider "aws" {
   region = "${local.aws_region}"
+}
+provider "doppler" {
+  doppler_token = "${get_env("DOPPLER_ST", "")}"
 }
 EOF
 }
