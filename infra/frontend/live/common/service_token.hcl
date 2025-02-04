@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # COMMON TERRAGRUNT CONFIGURATION
-# This is the common component configuration for webserver-cluster. The common variables for each environment to
-# deploy webserver-cluster are defined here. This configuration will be merged into the environment configuration
+# This is the common component configuration for service_token. The common variables for each environment to
+# deploy service_token are defined here. This configuration will be merged into the environment configuration
 # via an include block.
 # ---------------------------------------------------------------------------------------------------------------------
 
