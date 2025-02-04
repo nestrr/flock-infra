@@ -3,4 +3,3 @@ output "doppler_service_token_secret_id" {
   description = "The id of the AWSSM secret ID that holds the service token value"
   sensitive   = true
 }
-
