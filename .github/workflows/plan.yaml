@@ -29,7 +29,6 @@ permissions:
 env:
   TG_VERSION: '0.72.5'
   TF_VERSION: '1.10.5'
-  ACTIONS_ENVIRONMENT: ${{ inputs.actions_environment }}
   TERRAGRUNT_EXCLUDE_DIR: ${{ inputs.tg_exclude_dir != '' && format('**/*/oidc, {0}', inputs.tg_exclude_dir) || '**/*/oidc' }} # excluded because it only needs to run once (to set up OIDC provider for Actions to authenticate to AWS)
   TERRAGRUNT_INCLUDE_DIR: ${{ inputs.tg_include_dir }}
   TERRAGRUNT_NON_INTERACTIVE: true
@@ -37,16 +36,21 @@ env:
   PLAN_FLAGS: ${{ inputs.plan_flags }}
 
 jobs:
-  test:
+  set-tag:
     runs-on: ubuntu-latest
     steps:
-      - name: Test
-        id: test
-        run: echo ${{ github.env.ACTIONS_ENVIRONMENT }}
+      - name: Set tag for this PR to be able to access environment secrets
+        uses: anothrNick/github-tag-action@v1
+        env:
+          CUSTOM_TAG: plan
   plan:
     runs-on: ubuntu-latest
-    environment: ${{ github.env.ACTIONS_ENVIRONMENT }}
+    environment: ${{ inputs.actions_environment }}
     steps:
+      - name: Set tag for this PR to be able to access environment secrets
+        uses: anothrNick/github-tag-action@v1
+        env:
+          CUSTOM_TAG: plan
       - name: Checkout
         uses: actions/checkout@main
       - name: Authenticate to AWS
