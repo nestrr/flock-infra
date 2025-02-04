@@ -37,9 +37,6 @@ terraform {
 provider "aws" {
   region = "${local.aws_region}"
 }
-provider "doppler" {
-  doppler_token = "${get_env("DOPPLER_ST", "")}"
-}
 EOF
 }
 

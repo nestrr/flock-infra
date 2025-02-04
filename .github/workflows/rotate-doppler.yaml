@@ -1,0 +1,72 @@
+name: Rotate Doppler token
+on:
+  workflow_dispatch:
+    inputs:
+      layer:
+        description: 'The layer (frontend or backend)'
+        required: true
+        type: choice
+        options:
+          - frontend
+          - backend
+      env_config:
+        description: 'The environment config (stage or prod)'
+        required: true
+        type: choice
+        options:
+          - stage
+          - prod
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  ACTIONS_ENVIRONMENT: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
+
+jobs:
+  rotate:
+    if: ${{ secrets.DOPPLER_PT != '' }}
+    name: Rotate token
+    uses: nestrr/flock-infra/.github/workflows/deploy.yaml@main
+    with:
+      actions_environment: ${{ env.ACTIONS_ENVIRONMENT }}
+      tg_include_dir: ${{ format('infra/{0}/live/{1}/service_token', inputs.layer, inputs.env_config) }}
+      apply_flags: '--feature modify_service_token=true'
+    secrets: inherit
+  cleanup:
+    name: Cleanup environment
+    if: ${{ always() }} # Clean up sensitive information regardless if rotation of service token was successful
+    needs: [ rotate ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revoke Doppler token
+        if: ${{ secrets.DOPPLER_PT != '' }}
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
+        run: |
+          curl --request POST \
+               --url https://api.doppler.com/v3/auth/revoke \
+               --header 'accept: application/json' \
+               --header 'content-type: application/json' \
+               --data '{"token":"$DOPPLER_TOKEN"}'
+      - name: Delete Doppler token secret from environment
+        if: ${{ secrets.DOPPLER_PT != '' }}
+        uses: octokit/request-action@v2.x
+        id: delete_secret
+        with:
+          route: ${{ format('DELETE /repos/nestrr/flock-infra/environments/{0}/secrets/{1}', env.ACTIONS_ENVIRONMENT, inputs.secret_name) }}
+          owner: nestrr
+          repo: flock-infra
+          environment_name: ${{ env.ACTIONS_ENVIRONMENT }}
+          secret_name: ${{ inputs.secret_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Disable this workflow
+        uses: octokit/request-action@v2.x
+        id: disable_workflow
+        with:
+          route: 'PUT /repos/nestrr/flock-infra/actions/workflows/rotate-doppler.yaml/disable'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
