@@ -18,6 +18,7 @@ include "common" {
   expose = true
 }
 
+# Create feature so that service token is only modified if this feature is explicitly set to true.
 feature "modify_service_token" {
   default = false
 }
@@ -32,6 +33,7 @@ terraform {
   }
 }
 
+# Exclude this unit from run queue if run-all is being used
 exclude {
     if = !feature.modify_service_token.value
     actions = ["apply", "destroy", "plan"]
