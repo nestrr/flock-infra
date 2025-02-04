@@ -1,6 +1,7 @@
 data "aws_caller_identity" "self" {}
 
 resource "doppler_service_token" "ci_service_token" {
+  provider = doppler.personal
   project = var.project
   config  = var.config
   name    = format("Service_Token_%s-%s", var.service_token_slug, timestamp())
