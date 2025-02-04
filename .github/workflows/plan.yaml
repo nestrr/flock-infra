@@ -37,6 +37,12 @@ env:
   PLAN_FLAGS: ${{ inputs.plan_flags }}
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        id: test
+        run: echo ${{ github.env.ACTIONS_ENVIRONMENT }}
   plan:
     runs-on: ubuntu-latest
     environment: ${{ github.env.ACTIONS_ENVIRONMENT }}
