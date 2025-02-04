@@ -34,7 +34,6 @@ permissions:
 env:
   TG_VERSION: '0.72.5'
   TF_VERSION: '1.10.5'
-  ACTIONS_ENVIRONMENT: ${{ inputs.actions_environment }}
   TERRAGRUNT_EXCLUDE_DIR: ${{ inputs.tg_exclude_dir != '' && format('**/*/oidc, {0}', inputs.tg_exclude_dir) || '**/*/oidc' }} # excluded because it only needs to run once (to set up OIDC provider for Actions to authenticate to AWS)
   TERRAGRUNT_INCLUDE_DIR: ${{ inputs.tg_include_dir }}
   TERRAGRUNT_NON_INTERACTIVE: true
@@ -44,7 +43,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: ${{ github.env.ACTIONS_ENVIRONMENT }}
+    environment: ${{ inputs.actions_environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
