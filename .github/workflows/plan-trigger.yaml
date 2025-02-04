@@ -67,7 +67,7 @@ jobs:
             infra/backend/live/prod/**/**
   trigger-deploy-fe-stage:
     needs: detect-changed
-    name: Trigger frontend-stage-deploy if needed
+    name: Trigger frontend-stage plan if needed
     if: needs.detect-changed.outputs.fe-stage-changes == 'true' || needs.detect-changed.outputs.fe-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/plan.yaml@main
     with:
@@ -77,7 +77,7 @@ jobs:
     secrets: inherit
   trigger-deploy-fe-prod:
     needs: detect-changed
-    name: Trigger frontend-stage-deploy if needed
+    name: Trigger frontend-prod plan if needed
     if: needs.detect-changed.outputs.fe-prod-changes == 'true' || needs.detect-changed.outputs.fe-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/plan.yaml@main
     with:
@@ -87,7 +87,7 @@ jobs:
     secrets: inherit
   trigger-deploy-be-stage:
     needs: detect-changed
-    name: Trigger backend-stage-deploy if needed
+    name: Trigger backend-stage plan if needed
     if: needs.detect-changed.outputs.be-stage-changes == 'true' || needs.detect-changed.outputs.be-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/plan.yaml@main
     with:
@@ -97,7 +97,7 @@ jobs:
     secrets: inherit
   trigger-deploy-be-prod:
     needs: detect-changed
-    name: Trigger backend-stage-deploy if needed
+    name: Trigger backend-stage plan if needed
     if: needs.detect-changed.outputs.be-prod-changes == 'true' || needs.detect-changed.outputs.be-common-changes == 'true'
     uses: nestrr/flock-infra/.github/workflows/plan.yaml@main
     with:
