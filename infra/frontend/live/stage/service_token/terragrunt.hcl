@@ -37,9 +37,6 @@ exclude {
     actions = ["apply", "destroy", "plan"]
 }
 
-# ---------------------------------------------------------------------------------------------------------------------
-# We don't need to override any of the common parameters for this environment, so we don't specify any inputs.
-# ----------------------------------------------------------------------------------------------------------------
 inputs = {
   project = "flock-frontend"
   config = "stage"
