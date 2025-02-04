@@ -56,7 +56,7 @@ jobs:
           tg_version: ${{ env.TG_VERSION }}
           tf_version: ${{ env.TF_VERSION }}
           tg_comment: true
-          tg_command: format('run-all {0} plan', env.PLAN_FLAGS)
+          tg_command: ${{ format('run-all {0} plan', env.PLAN_FLAGS) }}
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
