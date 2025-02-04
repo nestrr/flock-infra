@@ -45,7 +45,7 @@ jobs:
         run: echo ${{ github.env.ACTIONS_ENVIRONMENT }}
   plan:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.actions_environment }}
+    environment: ${{ github.env.ACTIONS_ENVIRONMENT }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
