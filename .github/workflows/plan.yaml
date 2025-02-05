@@ -59,3 +59,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ steps.creds.outputs.aws-access-key-id }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
           TG_BUCKET_PREFIX: ${{ secrets.TG_BUCKET_PREFIX }}
+          LATEST_RELEASE_TAG: ${{ vars.LATEST_RELEASE_TAG }}
