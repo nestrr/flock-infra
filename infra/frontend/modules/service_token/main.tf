@@ -23,7 +23,7 @@ resource "aws_kms_key_policy" "cmk_admin_policy" {
     Id = "EnableEphemeralUserToManageCMKKey"
     Statement = [
       {
-        Effect   = "Allow"
+        Effect = "Allow"
         Action = [
           "kms:Create*",
           "kms:Describe*",
@@ -56,11 +56,13 @@ resource "aws_secretsmanager_secret" "doppler_service_token_secret" {
   lifecycle {
     create_before_destroy = true
   }
+  depends_on = [aws_kms_key_policy.cmk_admin_policy]
 }
 
 resource "aws_kms_ciphertext" "doppler_service_token_ciphertext" {
   key_id    = aws_kms_key.cmk.key_id
   plaintext = doppler_service_token.ci_service_token.key
+  depends_on = [aws_kms_key_policy.cmk_admin_policy]
 }
 
 data "aws_iam_policy_document" "secret_management_policy" {
