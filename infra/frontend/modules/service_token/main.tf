@@ -24,21 +24,24 @@ resource "aws_kms_key_policy" "cmk_admin_policy" {
     Statement = [
       {
         Effect   = "Allow"
-        Resource = [aws_kms_key.cmk.arn]
-        Action = ["kms:Create*",
+        Action = [
+          "kms:Create*",
           "kms:Describe*",
           "kms:Enable*",
           "kms:List*",
           "kms:Put*",
           "kms:Get*",
           "kms:Decrypt*",
-        "kms:Encrypt*"]
+          "kms:Encrypt*"
+        ]
+        Resource = [aws_kms_key.cmk.arn]
         Principal = {
           type        = "AWS"
           identifiers = [data.aws_caller_identity.self.arn]
         }
       }
     ]
+    Version = "2012-10-17"
   })
 }
 
@@ -80,8 +83,7 @@ data "aws_iam_policy_document" "secret_management_policy" {
       "secretsmanager:Delete*",
     ]
     resources = [
-      aws_secretsmanager_secret.doppler_service_token_secret.arn,
-      aws_secretsmanager_secret_version.doppler_personal_token_secret_val.arn
+      aws_secretsmanager_secret.doppler_service_token_secret.arn
     ]
   }
 }
