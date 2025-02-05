@@ -53,7 +53,8 @@ data "aws_iam_policy_document" "iam_policy_doc" {
       "secretsmanager:Create*",
       "secretsmanager:Put*",
       "secretsmanager:Delete*",
-      "secretsmanager:TagResource"
+      "secretsmanager:TagResource",
+      "secretsmanager:DescribeSecret"
     ]
     resources = [
       format("arn:aws:secretsmanager:*:%s:secret:*", data.aws_caller_identity.self.account_id)
@@ -65,7 +66,7 @@ data "aws_iam_policy_document" "iam_policy_doc" {
       "iam:CreatePolicy"
     ]
     resources = [
-      "arn:aws:secretsmanager::::*"
+      format("arn:aws:secretsmanager:*:%s:secret:*", data.aws_caller_identity.self.account_id)
     ]
   }
 }
