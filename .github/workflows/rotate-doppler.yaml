@@ -53,7 +53,7 @@ jobs:
         uses: octokit/request-action@v2.x
         id: delete_secret
         with:
-          route: ${{ format('DELETE /repos/nestrr/flock-infra/environments/{0}/secrets/{1}', env.ACTIONS_ENVIRONMENT, "DOPPLER_PT") }}
+          route: ${{ format('DELETE /repos/nestrr/flock-infra/environments/{0}/secrets/{1}', env.ACTIONS_ENVIRONMENT, 'DOPPLER_PT') }}
           owner: nestrr
           repo: flock-infra
           environment_name: ${{ env.ACTIONS_ENVIRONMENT }}
