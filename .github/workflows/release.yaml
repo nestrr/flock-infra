@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-22.04
     permissions:
       contents: write
+    outputs:
+      new_tag: ${{ steps.new_release.outputs.new_tag }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -20,8 +22,22 @@ jobs:
 
     - name: Bump version and push tag
       uses: anothrNick/github-tag-action@v1
+      id: new_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
         WITH_V: true
         PRERELEASE: true
         ref: ${{github.sha}}
+  bump-latest-ref:
+    needs: build
+    name: Bump LATEST_RELEASE_TAG repository-level environment variable
+    runs-on: ubuntu-latest
+    steps:
+      - uses: octokit/request-action@v2.x
+        id: bump_env_var
+        with:
+          route: 'PATCH /repos/nestrr/flock-infra/actions/variables/LATEST_RELEASE_TAG'
+          name: LATEST_RELEASE_TAG
+          value: ${{ needs.build.outputs.new_tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.POST_RELEASE_TOKEN }}
