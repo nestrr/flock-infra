@@ -13,63 +13,10 @@ permissions:
 
 jobs:
   detect-changed:
+    name: Trigger frontend-stage deploy if needed
     if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    outputs:
-      fe-stage-changes: ${{ steps.changed-files-fe-stage.outputs.any_changed }}
-      fe-prod-changes: ${{ steps.changed-files-fe-prod.outputs.any_changed }}
-      fe-common-changes: ${{ steps.changed-files-fe-common.outputs.any_changed }}
-      be-stage-changes: ${{ steps.changed-files-be-stage.outputs.any_changed }}
-      be-prod-changes: ${{ steps.changed-files-be-prod.outputs.any_changed }}
-      be-common-changes: ${{ steps.changed-files-be-common.outputs.any_changed }}
-      root-changes: ${{ steps.changed-root.outputs.any_changed }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-      # Not including modules directories here, because Terragrunt units lock down the module version used
-      # So if a module changes, it will only affect infrastructure if one of the units are changed - which would be caught here
-      - name: Get changed files from frontend-stage
-        id: changed-files-fe-stage
-        uses: tj-actions/changed-files@v45
-        with:
-          files: 'infra/frontend/live/stage/**'
-      - name: Get changed files from frontend-prod
-        id: changed-files-fe-prod
-        uses: tj-actions/changed-files@v45
-        with:
-          files: 'infra/frontend/live/prod/**'
-      - name: Get changed files common to the frontend
-        id: changed-files-fe-common
-        uses: tj-actions/changed-files@v45
-        with:
-          files: 'infra/frontend/live/**'
-          files_ignore: |
-            infra/frontend/live/stage/**/**
-            infra/frontend/live/prod/**/**
-      - name: Get changed files from backend-stage
-        id: changed-files-be-stage
-        uses: tj-actions/changed-files@v45
-        with:
-          files: 'infra/backend/live/stage/**/**'
-      - name: Get changed files from backend-prod
-        id: changed-files-be-prod
-        uses: tj-actions/changed-files@v45
-        with:
-          files: 'infra/backend/live/prod/**/**'
-      - name: Get changed files common to the backend
-        id: changed-files-be-common
-        uses: tj-actions/changed-files@v45
-        with:
-          files: 'infra/backend/live/**/**'
-          files_ignore: |
-            infra/backend/live/stage/**/**
-            infra/backend/live/prod/**/**
-      - name: Get changed files common to all layers
-        id: changed-root
-        uses: tj-actions/changed-files@v45
-        with:
-          files: 'infra/root.hcl'
+    uses: nestrr/flock-infra/.github/workflows/detect-infra-changes.yaml@main
+    secrets: inherit
   trigger-deploy-fe-stage:
     needs: detect-changed
     name: Trigger frontend-stage deploy if needed
