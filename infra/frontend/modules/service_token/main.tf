@@ -32,7 +32,8 @@ resource "aws_kms_key_policy" "cmk_admin_policy" {
           "kms:Put*",
           "kms:Get*",
           "kms:Decrypt*",
-          "kms:Encrypt*"
+          "kms:Encrypt*",
+          "kms:GenerateDataKey"
         ]
         Resource = [aws_kms_key.cmk.arn]
         Principal = {
