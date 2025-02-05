@@ -37,7 +37,11 @@ data "aws_iam_policy_document" "iam_policy_doc" {
     actions = [
       "kms:Create*",
       "kms:Put*",
-      "kms:Delete*"
+      "kms:Delete*",
+      "kms:EnableKeyRotation",
+      "kms:GenerateDataKey",
+      "kms:Encrypt",
+      "kms:Decrypt"
     ]
     resources = [
       "*"
@@ -48,10 +52,11 @@ data "aws_iam_policy_document" "iam_policy_doc" {
     actions = [
       "secretsmanager:Create*",
       "secretsmanager:Put*",
-      "secretsmanager:Delete*"
+      "secretsmanager:Delete*",
+      "secretsmanager:TagResource"
     ]
     resources = [
-      "arn:aws:secretsmanager::::*"
+      format("arn:aws:secretsmanager:*:%s:secret:*", data.aws_caller_identity.self.account_id)
     ]
   }
   statement {
