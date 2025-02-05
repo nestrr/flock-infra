@@ -20,17 +20,14 @@ on:
 permissions:
   id-token: write
   contents: read
-
-env:
-  ACTIONS_ENVIRONMENT: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
+  actions: write
 
 jobs:
   rotate:
-    if: ${{ secrets.DOPPLER_PT != '' }}
     name: Rotate token
     uses: nestrr/flock-infra/.github/workflows/deploy.yaml@main
     with:
-      actions_environment: ${{ env.ACTIONS_ENVIRONMENT }}
+      actions_environment: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
       tg_include_dir: ${{ format('infra/{0}/live/{1}/service_token', inputs.layer, inputs.env_config) }}
       apply_flags: '--feature modify_service_token=true'
     secrets: inherit
@@ -39,29 +36,32 @@ jobs:
     if: ${{ always() }} # Clean up sensitive information regardless if rotation of service token was successful
     needs: [ rotate ]
     runs-on: ubuntu-latest
+    environment: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
     steps:
       - name: Revoke Doppler token
-        if: ${{ secrets.DOPPLER_PT != '' }}
-        env:
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
+        if: ${{ env.DOPPLER_TOKEN != '' }}
         run: |
           curl --request POST \
                --url https://api.doppler.com/v3/auth/revoke \
                --header 'accept: application/json' \
                --header 'content-type: application/json' \
                --data '{"token":"$DOPPLER_TOKEN"}'
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
       - name: Delete Doppler token secret from environment
-        if: ${{ secrets.DOPPLER_PT != '' }}
+        if: ${{ env.DOPPLER_TOKEN != '' }}
         uses: octokit/request-action@v2.x
         id: delete_secret
         with:
-          route: ${{ format('DELETE /repos/nestrr/flock-infra/environments/{0}/secrets/{1}', env.ACTIONS_ENVIRONMENT, inputs.secret_name) }}
+          route: ${{ format('DELETE /repos/nestrr/flock-infra/environments/{0}/secrets/{1}', env.ACTIONS_ENVIRONMENT, "DOPPLER_PT") }}
           owner: nestrr
           repo: flock-infra
           environment_name: ${{ env.ACTIONS_ENVIRONMENT }}
-          secret_name: ${{ inputs.secret_name }}
+          secret_name: "DOPPLER_PT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
+          ACTIONS_ENVIRONMENT: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
       - name: Disable this workflow
         uses: octokit/request-action@v2.x
         id: disable_workflow
