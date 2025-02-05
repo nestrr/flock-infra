@@ -48,20 +48,16 @@ jobs:
                --data '{"token":"$DOPPLER_TOKEN"}'
         env:
           DOPPLER_TOKEN: ${{ secrets[vars.DOPPLER_TOKEN_SECRET_NAME] }}
-#      - name: Delete Doppler token secret from environment
-#        if: ${{ env.DOPPLER_TOKEN != '' }}
-#        uses: octokit/request-action@v2.x
-#        id: delete_secret
-#        with:
-#          route: ${{ format('DELETE /repos/nestrr/flock-infra/environments/{0}/secrets/{1}', env.ACTIONS_ENVIRONMENT, 'DOPPLER_PT') }}
-#          owner: nestrr
-#          repo: flock-infra
-#          environment_name: ${{ env.ACTIONS_ENVIRONMENT }}
-#          secret_name: "DOPPLER_PT"
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
-#          ACTIONS_ENVIRONMENT: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
+      - name: Delete Doppler token secret from environment
+        if: ${{ env.DOPPLER_TOKEN != '' }}
+        uses: octokit/request-action@v2.x
+        id: delete_secret
+        with:
+          route: ${{ format('DELETE /repos/nestrr/flock-infra/environments/{0}/secrets/{1}', env.ACTIONS_ENVIRONMENT, vars.DOPPLER_TOKEN_SECRET_NAME) }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.ROTATION_CLEANUP_TOKEN }}
+          DOPPLER_TOKEN: ${{ secrets[vars.DOPPLER_TOKEN_SECRET_NAME] }}
+          ACTIONS_ENVIRONMENT: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
       - name: Disable this workflow
         uses: octokit/request-action@v2.x
         id: disable_workflow
