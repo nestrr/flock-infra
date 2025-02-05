@@ -66,3 +66,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
           TG_BUCKET_PREFIX: ${{ secrets.TG_BUCKET_PREFIX }}
           DOPPLER_PT: ${{ secrets.DOPPLER_PT }} # will be empty unless the token is being refreshed
+          LATEST_TAG: ${{ vars.LATEST_TAG }}
