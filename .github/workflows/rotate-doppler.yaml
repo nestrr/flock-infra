@@ -57,10 +57,11 @@ jobs:
           owner: nestrr
           repo: flock-infra
           environment_name: ${{ env.ACTIONS_ENVIRONMENT }}
-          secret_name: ${{ inputs.secret_name }}
+          secret_name: "DOPPLER_PT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
+          ACTIONS_ENVIRONMENT: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
       - name: Disable this workflow
         uses: octokit/request-action@v2.x
         id: disable_workflow
