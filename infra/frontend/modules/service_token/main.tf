@@ -36,7 +36,10 @@ resource "aws_kms_key_policy" "cmk_admin_policy" {
         ]
         Resource = [aws_kms_key.cmk.arn]
         Principal = {
-          "AWS": format("arn:aws:iam::%s:root", data.aws_caller_identity.self.account_id)
+          "AWS": [
+            format("arn:aws:iam::%s:root", data.aws_caller_identity.self.account_id),
+            data.aws_caller_identity.self.arn
+          ]
         }
       }
     ]
