@@ -36,7 +36,7 @@ resource "aws_kms_key_policy" "cmk_admin_policy" {
         ]
         Resource = [aws_kms_key.cmk.arn]
         Principal = {
-          "AWS": data.aws_caller_identity.self.arn
+          "AWS": format("arn:aws:sts::%s:*", data.aws_caller_identity.self.account_id)
         }
       }
     ]
@@ -71,7 +71,9 @@ data "aws_iam_policy_document" "secret_management_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = [data.aws_caller_identity.self.arn]
+      identifiers = [
+        format("arn:aws:sts::%s:*", data.aws_caller_identity.self.account_id)
+      ]
     }
     actions = [
       "secretsmanager:Create*",
