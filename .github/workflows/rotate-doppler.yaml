@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Revoke Doppler token
-        if: ${{ secrets.DOPPLER_PT != '' }}
+        if: ${{ env.DOPPLER_TOKEN != '' }}
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
         run: |
