@@ -26,7 +26,6 @@ env:
 
 jobs:
   rotate:
-    if: ${{ secrets.DOPPLER_PT != '' }}
     name: Rotate token
     uses: nestrr/flock-infra/.github/workflows/deploy.yaml@main
     with:
