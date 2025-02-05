@@ -6,6 +6,7 @@ module "oidc_github" {
   iam_role_policy_arns = [
     aws_iam_policy.iam_policy.arn
   ]
+  enabled = var.enable_resource_creation
 }
 
 resource "aws_iam_policy" "iam_policy" {
