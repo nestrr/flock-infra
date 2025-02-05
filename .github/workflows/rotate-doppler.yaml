@@ -37,7 +37,6 @@ jobs:
     needs: [ rotate ]
     runs-on: ubuntu-latest
     environment: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
-
     steps:
       - name: Revoke Doppler token
         if: ${{ env.DOPPLER_TOKEN != '' }}
@@ -55,10 +54,6 @@ jobs:
         id: delete_secret
         with:
           route: ${{ format('DELETE /repos/nestrr/flock-infra/environments/{0}/secrets/{1}', env.ACTIONS_ENVIRONMENT, vars.DOPPLER_TOKEN_SECRET_NAME) }}
-          owner: nestrr
-          repo: flock-infra
-          environment_name: ${{ env.ACTIONS_ENVIRONMENT }}
-          secret_name: ${{ vars.DOPPLER_TOKEN_SECRET_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.ROTATION_CLEANUP_TOKEN }}
           DOPPLER_TOKEN: ${{ secrets[vars.DOPPLER_TOKEN_SECRET_NAME] }}
