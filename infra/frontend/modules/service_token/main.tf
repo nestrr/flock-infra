@@ -57,6 +57,7 @@ resource "aws_secretsmanager_secret" "doppler_service_token_secret" {
     create_before_destroy = true
   }
   depends_on = [aws_kms_key_policy.cmk_admin_policy]
+  policy = data.aws_iam_policy_document.secret_management_policy.json
 }
 
 resource "aws_kms_ciphertext" "doppler_service_token_ciphertext" {
