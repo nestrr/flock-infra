@@ -108,7 +108,7 @@ def dispatch_workflow(layer: str, env_config: str, token: str):
             'layer': layer,
             'env_config': env_config
         },
-        'ref': 'rotate-token'
+        'ref': 'main'
     }
     response = requests.post(url, data=json.dumps(dispatch_data), headers=get_headers(token))
     print(response.text)
