@@ -59,6 +59,7 @@ jobs:
           secret_name: ${{ inputs.secret_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
       - name: Disable this workflow
         uses: octokit/request-action@v2.x
         id: disable_workflow
