@@ -21,15 +21,12 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  ACTIONS_ENVIRONMENT: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
-
 jobs:
   rotate:
     name: Rotate token
     uses: nestrr/flock-infra/.github/workflows/deploy.yaml@main
     with:
-      actions_environment: ${{ env.ACTIONS_ENVIRONMENT }}
+      actions_environment: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
       tg_include_dir: ${{ format('infra/{0}/live/{1}/service_token', inputs.layer, inputs.env_config) }}
       apply_flags: '--feature modify_service_token=true'
     secrets: inherit
