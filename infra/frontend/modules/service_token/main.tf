@@ -57,9 +57,6 @@ resource "aws_secretsmanager_secret" "doppler_service_token_secret" {
   tags = {
     "created" : timestamp()
   }
-  lifecycle {
-    create_before_destroy = true
-  }
   depends_on = [aws_kms_key_policy.cmk_admin_policy]
 }
 
