@@ -36,8 +36,7 @@ resource "aws_kms_key_policy" "cmk_admin_policy" {
         ]
         Resource = [aws_kms_key.cmk.arn]
         Principal = {
-          type        = "AWS"
-          identifiers = [data.aws_caller_identity.self.arn]
+          "AWS": data.aws_caller_identity.self.arn
         }
       }
     ]
@@ -80,7 +79,7 @@ data "aws_iam_policy_document" "secret_management_policy" {
       "secretsmanager:Put*",
       "secretsmanager:Tag*",
       "secretsmanager:Untag*",
-      "secretsmanager:Delete*",
+      "secretsmanager:Delete*"
     ]
     resources = [
       aws_secretsmanager_secret.doppler_service_token_secret.arn
