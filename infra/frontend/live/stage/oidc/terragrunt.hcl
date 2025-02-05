@@ -40,9 +40,6 @@ exclude {
     actions = ["apply", "destroy", "plan"]
 }
 
-# ---------------------------------------------------------------------------------------------------------------------
-# We don't need to override any of the common parameters for this environment, so we don't specify any inputs.
-# ----------------------------------------------------------------------------------------------------------------
 inputs = {
   enable_resource_creation = feature.create_oidc_resources.value
 }
