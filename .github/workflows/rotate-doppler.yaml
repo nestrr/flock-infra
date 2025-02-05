@@ -21,6 +21,9 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
+
 jobs:
   rotate:
     name: Rotate token
@@ -38,8 +41,6 @@ jobs:
     steps:
       - name: Revoke Doppler token
         if: ${{ env.DOPPLER_TOKEN != '' }}
-        env:
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
         run: |
           curl --request POST \
                --url https://api.doppler.com/v3/auth/revoke \
@@ -47,7 +48,7 @@ jobs:
                --header 'content-type: application/json' \
                --data '{"token":"$DOPPLER_TOKEN"}'
       - name: Delete Doppler token secret from environment
-        if: ${{ secrets.DOPPLER_PT != '' }}
+        if: ${{ env.DOPPLER_TOKEN != '' }}
         uses: octokit/request-action@v2.x
         id: delete_secret
         with:
