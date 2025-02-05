@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   detect-changed:
-    name: Trigger frontend-stage deploy if needed
+    name: Detect infrastructure changes
     uses: nestrr/flock-infra/.github/workflows/detect-infra-changes.yaml@main
     secrets: inherit
   trigger-deploy-fe-stage:

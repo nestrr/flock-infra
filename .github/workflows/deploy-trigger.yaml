@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   detect-changed:
-    name: Trigger frontend-stage deploy if needed
+    name: Detect infrastructure changes
     if: github.event.pull_request.merged == true
     uses: nestrr/flock-infra/.github/workflows/detect-infra-changes.yaml@main
     secrets: inherit
