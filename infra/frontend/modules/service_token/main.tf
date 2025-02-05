@@ -57,7 +57,6 @@ resource "aws_secretsmanager_secret" "doppler_service_token_secret" {
     create_before_destroy = true
   }
   depends_on = [aws_kms_key_policy.cmk_admin_policy]
-  policy = data.aws_iam_policy_document.secret_management_policy.json
 }
 
 resource "aws_kms_ciphertext" "doppler_service_token_ciphertext" {
@@ -66,7 +65,12 @@ resource "aws_kms_ciphertext" "doppler_service_token_ciphertext" {
   depends_on = [aws_kms_key_policy.cmk_admin_policy]
 }
 
-data "aws_iam_policy_document" "secret_management_policy" {
+resource "aws_secretsmanager_secret_policy" "secret_management_policy" {
+  secret_arn = aws_secretsmanager_secret.doppler_service_token_secret.arn
+  policy     = data.aws_iam_policy_document.secret_management_policy_doc.json
+}
+
+data "aws_iam_policy_document" "secret_management_policy_doc" {
   statement {
     sid    = "EnableEphemeralUserToManageSecrets"
     effect = "Allow"
@@ -96,4 +100,5 @@ data "aws_iam_policy_document" "secret_management_policy" {
 resource "aws_secretsmanager_secret_version" "doppler_personal_token_secret_val" {
   secret_id     = aws_secretsmanager_secret.doppler_service_token_secret.id
   secret_string = aws_kms_ciphertext.doppler_service_token_ciphertext.ciphertext_blob
+  depends_on = [aws_secretsmanager_secret_policy.secret_management_policy]
 }
