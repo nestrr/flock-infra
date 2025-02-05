@@ -21,9 +21,6 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
-
 jobs:
   rotate:
     name: Rotate token
@@ -38,6 +35,7 @@ jobs:
     if: ${{ always() }} # Clean up sensitive information regardless if rotation of service token was successful
     needs: [ rotate ]
     runs-on: ubuntu-latest
+    environment: ${{ format('{0}-{1}', inputs.layer, inputs.env_config) }}
     steps:
       - name: Revoke Doppler token
         if: ${{ env.DOPPLER_TOKEN != '' }}
@@ -47,6 +45,8 @@ jobs:
                --header 'accept: application/json' \
                --header 'content-type: application/json' \
                --data '{"token":"$DOPPLER_TOKEN"}'
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_PT }}
       - name: Delete Doppler token secret from environment
         if: ${{ env.DOPPLER_TOKEN != '' }}
         uses: octokit/request-action@v2.x
