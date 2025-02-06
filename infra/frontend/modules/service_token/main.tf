@@ -95,6 +95,6 @@ data "aws_iam_policy_document" "secret_management_policy_doc" {
 
 resource "aws_secretsmanager_secret_version" "doppler_personal_token_secret_val" {
   secret_id     = aws_secretsmanager_secret.doppler_service_token_secret.id
-  secret_string = "test" #doppler_service_token.ci_service_token.key
+  secret_string = doppler_service_token.ci_service_token.key
   depends_on = [aws_secretsmanager_secret_policy.secret_management_policy]
 }
