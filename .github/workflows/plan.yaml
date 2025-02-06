@@ -32,11 +32,7 @@ permissions:
 env:
   TG_VERSION: '0.72.5'
   TF_VERSION: '1.10.5'
-  TERRAGRUNT_EXCLUDE_DIR: ${{ inputs.tg_exclude_dir }}
-  TERRAGRUNT_INCLUDE_DIR: ${{ inputs.tg_include_dir }}
-  TERRAGRUNT_NON_INTERACTIVE: true
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  PLAN_FLAGS: ${{ inputs.plan_flags }}
 
 jobs:
   plan:
@@ -66,3 +62,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ steps.creds.outputs.aws-secret-access-key }}
           TG_BUCKET_PREFIX: ${{ secrets.TG_BUCKET_PREFIX }}
           LATEST_RELEASE_TAG: ${{ vars.LATEST_RELEASE_TAG }}
+          TERRAGRUNT_EXCLUDE_DIR: ${{ inputs.tg_exclude_dir }}
+          TERRAGRUNT_INCLUDE_DIR: ${{ inputs.tg_include_dir }}
+          PLAN_FLAGS: ${{ inputs.plan_flags }}
+          TERRAGRUNT_NON_INTERACTIVE: true
