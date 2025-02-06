@@ -34,11 +34,7 @@ permissions:
 env:
   TG_VERSION: '0.72.5'
   TF_VERSION: '1.10.5'
-  TERRAGRUNT_EXCLUDE_DIR: ${{ inputs.tg_exclude_dir }}
-  TERRAGRUNT_INCLUDE_DIR: ${{ inputs.tg_include_dir }}
-  TERRAGRUNT_NON_INTERACTIVE: true
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  APPLY_FLAGS: ${{ inputs.apply_flags }}
 
 jobs:
   deploy:
@@ -52,7 +48,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-east-1
-          role-to-assume:  ${{ secrets.GH_IAM_ROLE_ARN }}
+          role-to-assume: ${{ secrets.GH_IAM_ROLE_ARN }}
           output-credentials: true
       - name: Deploy
         uses: gruntwork-io/terragrunt-action@v2
@@ -67,3 +63,7 @@ jobs:
           TG_BUCKET_PREFIX: ${{ secrets.TG_BUCKET_PREFIX }}
           DOPPLER_PT: ${{ secrets.DOPPLER_PT }} # will be empty unless the token is being refreshed
           LATEST_RELEASE_TAG: ${{ vars.LATEST_RELEASE_TAG }}
+          TERRAGRUNT_EXCLUDE_DIR: ${{ inputs.tg_exclude_dir }}
+          TERRAGRUNT_INCLUDE_DIR: ${{ inputs.tg_include_dir }}
+          TERRAGRUNT_NON_INTERACTIVE: true
+          APPLY_FLAGS: ${{ inputs.apply_flags }}
