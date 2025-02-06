@@ -1,7 +1,19 @@
 name: Detect Terragrunt config changes
 on:
   workflow_call:
-
+    outputs:
+      fe-stage-changes:
+        description: "Changed files that affect frontend stage environment"
+        value: ${{ jobs.detect-changed.outputs.fe-stage-changes || jobs.detect-changed.outputs.fe-common-changes }}
+      be-stage-changes:
+        description: "Changed files that affect backend stage environment"
+        value: ${{ jobs.detect-changed.outputs.fe-stage-changes || jobs.detect-changed.outputs.be-common-changes }}
+      fe-prod-changes:
+        description: "Changed files that affect frontend prod environment"
+        value: ${{ jobs.detect-changed.outputs.fe-prod-changes  || jobs.detect-changed.outputs.fe-common-changes }}
+      be-prod-changes:
+        description: "Changed files that affect backend prod environment"
+        value: ${{ jobs.detect-changed.outputs.be-prod-changes || jobs.detect-changed.outputs.be-common-changes }}
 permissions:
   contents: read
 jobs:
@@ -10,11 +22,10 @@ jobs:
     outputs:
       fe-stage-changes: ${{ steps.changed-files-fe-stage.outputs.any_changed }}
       fe-prod-changes: ${{ steps.changed-files-fe-prod.outputs.any_changed }}
-      fe-common-changes: ${{ steps.changed-files-fe-common.outputs.any_changed }}
+      fe-common-changes: ${{ steps.changed-files-fe-common.outputs.any_changed || steps.changed-root.outputs.any_changed }}
       be-stage-changes: ${{ steps.changed-files-be-stage.outputs.any_changed }}
       be-prod-changes: ${{ steps.changed-files-be-prod.outputs.any_changed }}
-      be-common-changes: ${{ steps.changed-files-be-common.outputs.any_changed }}
-      root-changes: ${{ steps.changed-root.outputs.any_changed }}
+      be-common-changes: ${{ steps.changed-files-be-common.outputs.any_changed || steps.changed-root.outputs.any_changed }}
     steps:
       - uses: actions/checkout@v4
         with:
