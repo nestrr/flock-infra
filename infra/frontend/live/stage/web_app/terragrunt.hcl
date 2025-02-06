@@ -18,7 +18,7 @@ include "common" {
   expose = true
 }
 
-# Create feature so that service token is only modified if this feature is explicitly set to true.
+# Create feature so that deployment only happens if this feature is explicitly set to true.
 feature "deploy" {
   default = false
 }
