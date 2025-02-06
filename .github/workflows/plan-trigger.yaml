@@ -26,7 +26,7 @@ jobs:
     uses: nestrr/flock-infra/.github/workflows/plan.yaml@main
     with:
       actions_environment: "frontend-stage"
-      tg_include_dir: "infra/frontend/live/stage"
+      tg_include_dir: "infra/frontend/live/stage/**"
       head_ref: ${{ github.head_ref }}
     secrets: inherit
   trigger-deploy-fe-prod:
@@ -36,7 +36,7 @@ jobs:
     uses: nestrr/flock-infra/.github/workflows/plan.yaml@main
     with:
       actions_environment: "frontend-prod"
-      tg_include_dir: "infra/frontend/live/prod"
+      tg_include_dir: "infra/frontend/live/prod/**"
       head_ref: ${{ github.head_ref }}
     secrets: inherit
   trigger-deploy-be-stage:
@@ -46,7 +46,7 @@ jobs:
     uses: nestrr/flock-infra/.github/workflows/plan.yaml@main
     with:
       actions_environment: "backend-stage"
-      tg_include_dir: "infra/backend/live/stage"
+      tg_include_dir: "infra/backend/live/stage/**"
       head_ref: ${{ github.head_ref }}
     secrets: inherit
   trigger-deploy-be-prod:
@@ -56,6 +56,6 @@ jobs:
     uses: nestrr/flock-infra/.github/workflows/plan.yaml@main
     with:
       actions_environment: "backend-prod"
-      tg_include_dir: "infra/backend/live/prod"
+      tg_include_dir: "infra/backend/live/prod/**"
       head_ref: ${{ github.head_ref }}
     secrets: inherit
