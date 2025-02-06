@@ -32,6 +32,10 @@ terraform {
       source = "DopplerHQ/doppler"
       version = "~> 1.13.0"
     }
+    vercel = {
+      source = "vercel/vercel"
+      version = "~> 2.9.1"
+    }
   }
 }
 provider "aws" {
