@@ -27,6 +27,7 @@ jobs:
     with:
       actions_environment: "frontend-stage"
       tg_include_dir: "infra/frontend/live/stage"
+      head_ref: ${{ github.head_ref }}
     secrets: inherit
   trigger-deploy-fe-prod:
     needs: detect-changed
@@ -36,6 +37,7 @@ jobs:
     with:
       actions_environment: "frontend-prod"
       tg_include_dir: "infra/frontend/live/prod"
+      head_ref: ${{ github.head_ref }}
     secrets: inherit
   trigger-deploy-be-stage:
     needs: detect-changed
@@ -45,6 +47,7 @@ jobs:
     with:
       actions_environment: "backend-stage"
       tg_include_dir: "infra/backend/live/stage"
+      head_ref: ${{ github.head_ref }}
     secrets: inherit
   trigger-deploy-be-prod:
     needs: detect-changed
@@ -54,4 +57,5 @@ jobs:
     with:
       actions_environment: "backend-prod"
       tg_include_dir: "infra/backend/live/prod"
+      head_ref: ${{ github.head_ref }}
     secrets: inherit
