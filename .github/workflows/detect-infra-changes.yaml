@@ -7,7 +7,7 @@ on:
         value: ${{ jobs.detect-changed.outputs.fe-stage-changes || jobs.detect-changed.outputs.fe-common-changes }}
       be-stage-changes:
         description: "Changed files that affect backend stage environment"
-        value: ${{ jobs.detect-changed.outputs.fe-stage-changes || jobs.detect-changed.outputs.be-common-changes }}
+        value: ${{ jobs.detect-changed.outputs.be-stage-changes || jobs.detect-changed.outputs.be-common-changes }}
       fe-prod-changes:
         description: "Changed files that affect frontend prod environment"
         value: ${{ jobs.detect-changed.outputs.fe-prod-changes  || jobs.detect-changed.outputs.fe-common-changes }}
