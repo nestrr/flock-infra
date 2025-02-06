@@ -13,9 +13,14 @@ include "root" {
 # Include the common configuration for the component. The common configuration contains settings that are common
 # for the component across all environments.
 include "common" {
-  path = "${dirname(find_in_parent_folders("root.hcl"))}/frontend/live/common/web_app.hcl"
+  path   = "${dirname(find_in_parent_folders("root.hcl"))}/frontend/live/common/web_app.hcl"
   # We want to reference the variables from the included config in this configuration, so we expose it.
   expose = true
+}
+
+# Create feature so that deployment only happens if this feature is explicitly set to true.
+feature "deploy" {
+  default = false
 }
 
 
@@ -23,6 +28,19 @@ include "common" {
 # environment at a time (e.g., qa -> stage -> prod).
 terraform {
   source = "${include.common.locals.base_source_url}?ref=${get_env("LATEST_RELEASE_TAG", "")}"
+  before_hook "prevent_deploy" {
+    commands = ["apply", "destroy", "plan"]
+    execute  = feature.deploy.value ? ["bash", "-c", "echo 'Deploying web app.'"] : [
+      "bash", "-c", "echo 'Deployment of web app is skipped, as deploy feature is set to false.' && exit 1"
+    ]
+  }
+}
+
+
+# Exclude this unit from run queue if run-all is being used
+exclude {
+  if      = !feature.deploy.value
+  actions = ["apply", "destroy", "plan"]
 }
 
 # No inputs specified, as all are determined by includes.
