@@ -18,29 +18,10 @@ include "common" {
   expose = true
 }
 
-# Create feature so that deployment only happens if this feature is explicitly set to true.
-feature "deploy" {
-  default = false
-}
-
-
 # Configure the version of the module to use in this environment. This allows you to promote new versions one
 # environment at a time (e.g., qa -> stage -> prod).
 terraform {
   source = "${include.common.locals.base_source_url}?ref=${get_env("LATEST_RELEASE_TAG", "")}"
-  before_hook "prevent_deploy" {
-    commands = ["apply", "destroy", "plan"]
-    execute  = feature.deploy.value ? ["bash", "-c", "echo 'Deploying web app.'"] : [
-      "bash", "-c", "echo 'Deployment of web app is skipped, as deploy feature is set to false.' && exit 1"
-    ]
-  }
-}
-
-
-# Exclude this unit from run queue if run-all is being used
-exclude {
-  if      = !feature.deploy.value
-  actions = ["apply", "destroy", "plan"]
 }
 
 # No inputs specified, as all are determined by includes.

@@ -9,7 +9,8 @@ resource "vercel_project" "vercel_app" {
   framework      = "nextjs"
   git_repository = {
     type = "github"
-    repo = "nestrr/flock-frontend"
+    # TODO: change to Nestrr-owned repo when ready to deploy. This also requires changing the Vercel API key in Doppler.
+    repo = "maryam-khan-dev/flock-frontend"
   }
   serverless_function_region = "pdx1"
 }
@@ -26,9 +27,8 @@ resource "vercel_project_domain" "example" {
 # A redirect of a domain name to a second domain name.
 # The status_code can optionally be controlled.
 resource "vercel_project_domain" "example_redirect" {
-  project_id = vercel_project.vercel_app.id
-  domain     = "www.nestrr.io"
-
+  project_id           = vercel_project.vercel_app.id
+  domain               = "www.nestrr.io"
   redirect             = vercel_project_domain.example.domain
   redirect_status_code = 307
 }
