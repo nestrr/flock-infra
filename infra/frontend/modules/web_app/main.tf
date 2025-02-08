@@ -36,7 +36,7 @@ resource "vercel_project_domain" "example_redirect" {
 resource "vercel_project_environment_variables" "vercel_app_envs" {
   project_id = vercel_project.vercel_app.id
   variables  = [
-    for secret_name, secret_value in keys(data.doppler_secrets.this.map) :
+    for secret_name, secret_value in data.doppler_secrets.this.map :
     {
       key       = secret_name,
       value     = secret_value,
