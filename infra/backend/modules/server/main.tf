@@ -9,7 +9,7 @@ resource "hcloud_ssh_key" "main" {
   public_key = var.public_key
 }
 resource "hcloud_server" "backend_server" {
-  name        = "backend_server"
+  name        = "node1"
   image       = "fedora-41"
   server_type = "cpx11"
   location    = "hil-dc1"
