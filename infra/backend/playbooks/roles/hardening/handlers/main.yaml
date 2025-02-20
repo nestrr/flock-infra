@@ -1,0 +1,9 @@
+---
+- name: restart_ssh
+  become: yes
+  service:
+    name: sshd
+    state: restarted
+- name: reboot_host
+  ansible.builtin.reboot:
+    reboot_timeout: 360
