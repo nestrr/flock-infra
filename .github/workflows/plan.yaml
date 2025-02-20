@@ -66,3 +66,4 @@ jobs:
           TERRAGRUNT_INCLUDE_DIR: ${{ inputs.tg_include_dir }}
           PLAN_FLAGS: ${{ inputs.plan_flags }}
           TERRAGRUNT_NON_INTERACTIVE: true
+          HETZNER_PUBLIC_KEY: ${{ env.HCLOUD_PUBLIC_KEY }}
