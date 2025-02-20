@@ -39,8 +39,4 @@ exclude {
     actions = ["apply", "destroy", "plan"]
 }
 
-inputs = {
-  project = "flock-frontend"
-  config = "stage"
-  service_token_slug = format("frontend-stage")
-}
+# No inputs specified, as all are determined by includes.
