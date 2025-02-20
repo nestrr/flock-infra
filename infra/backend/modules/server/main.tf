@@ -12,7 +12,7 @@ resource "hcloud_server" "backend_server" {
   name        = "node1"
   image       = "fedora-41"
   server_type = "cpx11"
-  location    = "hil-dc1"
+  location    = "hil"
   public_net {
     ipv4_enabled = true
     ipv6_enabled = true
