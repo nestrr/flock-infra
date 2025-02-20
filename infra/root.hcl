@@ -6,19 +6,18 @@
 
 locals {
   # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
-  project_globals = read_terragrunt_config(find_in_parent_folders("globals.hcl"))
+  environment_vars   = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  project_globals    = read_terragrunt_config(find_in_parent_folders("globals.hcl"))
   # tfvars for local development - include TG_BUCKET_PREFIX at a minimum (different from the one used in CI)
   optional_var_files = [
     "${get_parent_terragrunt_dir()}/local-development.tfvars"
   ]
   # the project - either frontend or backend
-  project=local.project_globals.locals.project_name
-  environment=local.environment_vars.locals.environment
-  aws_region="us-east-1"
-  bucket_name="${get_env("TG_BUCKET_PREFIX", "")}-${local.project}-${local.environment}"
+  project     = local.project_globals.locals.project_name
+  environment = local.environment_vars.locals.environment
+  aws_region  = "us-east-1"
+  bucket_name = "${get_env("TG_BUCKET_PREFIX", "")}-${local.project}-${local.environment}"
 }
-
 
 
 # Generate an AWS provider block
@@ -36,6 +35,10 @@ terraform {
       source = "vercel/vercel"
       version = "~> 2.9.1"
     }
+    hcloud = {
+      source  = "hetznercloud/hcloud"
+      version = "~> 1.49"
+    }
   }
 }
 provider "aws" {
@@ -47,7 +50,7 @@ EOF
 # Configure Terragrunt to automatically store tfstate files in an S3 bucket
 remote_state {
   backend = "s3"
-  config = {
+  config  = {
     encrypt        = true
     bucket         = local.bucket_name
     key            = "${path_relative_to_include()}/tf.tfstate"
