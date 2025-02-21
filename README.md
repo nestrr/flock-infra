@@ -44,10 +44,7 @@ See Confluence for complete reasonings behind decisions.
 ## Development Standards
 
 * Do not make changes to staging/prod Terraform config locally. That should only happen through CI.
-*
-
-Follow [Terragrunt's recommended folder structure](https://docs.gruntwork.io/2.0/docs/overview/concepts/infrastructure-live/).
-
+* Follow [Terragrunt's recommended folder structure](https://docs.gruntwork.io/2.0/docs/overview/concepts/infrastructure-live/).
 * Do not place any secrets anywhere in the code. Secrets are managed by Doppler, so they should be placed there.
 * Name your branches based on the issue they relate to (e.g. `floc-48`).
 * Make concise but descriptive PRs.
