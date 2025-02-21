@@ -1,6 +1,7 @@
 ## Flock Infrastructure
 
-This repository hosts declarative configuration for Flock infrastructure needs.
+This repository hosts declarative configuration for Flock infrastructure needs. We use trunk-based development with
+issue tracking in Jira (issue progress is tracked automatically using Jira's integration with GitHub).
 
 ## Technologies used
 
@@ -43,10 +44,10 @@ See Confluence for complete reasonings behind decisions.
 
 * Do not make changes to staging/prod Terraform config locally. That should only happen through CI.
 *
-
 Follow [Terragrunt's recommended folder structure](https://docs.gruntwork.io/2.0/docs/overview/concepts/infrastructure-live/).
-
 * Do not place any secrets anywhere in the code. Secrets are managed by Doppler, so they should be placed there.
+* Name your branches based on the issue they relate to (e.g. `floc-48`).
+* Make concise but descriptive PRs.
 
 ## Getting Started
 
