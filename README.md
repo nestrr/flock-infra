@@ -33,7 +33,8 @@ See Confluence for complete reasonings behind decisions.
 * We use Vercel to deploy the frontend.
     * Currently, Vercel prohibits organizations from deploying to Vercel on the Free plan. To work around this, the
       Terraform configuration currently points to a personal account's fork of the `flock-frontend` repository. To keep
-      things synced, we use the Pull action is used to automatically create PRs whenever something is pushed
+      things synced, we use the [Pull](https://github.com/apps/pull) app to automatically create PRs whenever
+      something is pushed
       to `flock-frontend/main`.
 * We use Hetzner to deploy the backend.
     * In the future: we will use Docker Compose to
@@ -44,7 +45,9 @@ See Confluence for complete reasonings behind decisions.
 
 * Do not make changes to staging/prod Terraform config locally. That should only happen through CI.
 *
+
 Follow [Terragrunt's recommended folder structure](https://docs.gruntwork.io/2.0/docs/overview/concepts/infrastructure-live/).
+
 * Do not place any secrets anywhere in the code. Secrets are managed by Doppler, so they should be placed there.
 * Name your branches based on the issue they relate to (e.g. `floc-48`).
 * Make concise but descriptive PRs.
