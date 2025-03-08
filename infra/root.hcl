@@ -33,7 +33,7 @@ terraform {
     }
     vercel = {
       source = "vercel/vercel"
-      version = "~> 2.9.1"
+      version = "~> 2.10.1"
     }
     hcloud = {
       source  = "hetznercloud/hcloud"

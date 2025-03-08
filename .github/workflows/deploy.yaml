@@ -1,5 +1,30 @@
 name: Deploy Terragrunt infrastructure
 on:
+  workflow_dispatch:
+    inputs:
+      actions_environment:
+        description: 'The environment in GitHub Actions'
+        required: true
+        type: string
+      tg_include_dir:
+        description: 'The Terragrunt directories to include'
+        required: true
+        type: string
+      tg_exclude_dir:
+        description: 'Any Terragrunt directories to exclude. If a relative path is specified, it should be relative from the working directory.'
+        required: false
+        type: string
+        default: ''
+      deploy:
+        description: 'Whether to deploy the infrastructure or not.'
+        required: false
+        type: boolean
+        default: false
+      apply_flags:
+        description: 'Additional flags to pass Terragrunt apply'
+        required: false
+        type: string
+        default: ''
   workflow_call:
     inputs:
       actions_environment:
