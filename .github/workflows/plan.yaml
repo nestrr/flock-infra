@@ -76,7 +76,7 @@ jobs:
           role-to-assume: ${{ secrets.GH_IAM_ROLE_ARN }}
           output-credentials: true
       - name: Plan
-        uses: gruntwork-io/terragrunt-action@v2
+        uses: gruntwork-io/terragrunt-action@v3
         with:
           tg_version: ${{ env.TG_VERSION }}
           tf_version: ${{ env.TF_VERSION }}
