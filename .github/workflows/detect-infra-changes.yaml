@@ -27,7 +27,7 @@ jobs:
       be-prod-changes: ${{ steps.changed-files-be-prod.outputs.any_changed }}
       be-common-changes: ${{ steps.changed-files-be-common.outputs.any_changed || steps.changed-root.outputs.any_changed }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 1
       # Not including modules directories here, because Terragrunt units lock down the module version used
