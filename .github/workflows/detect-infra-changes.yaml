@@ -34,17 +34,17 @@ jobs:
       # So if a module changes, it will only affect infrastructure if one of the units are changed - which would be caught here
       - name: Get changed files from frontend-stage
         id: changed-files-fe-stage
-        uses: tj-actions/changed-files@v45
+        uses: tj-actions/changed-files@v47
         with:
           files: 'infra/frontend/live/stage/**'
       - name: Get changed files from frontend-prod
         id: changed-files-fe-prod
-        uses: tj-actions/changed-files@v45
+        uses: tj-actions/changed-files@v47
         with:
           files: 'infra/frontend/live/prod/**'
       - name: Get changed files common to the frontend
         id: changed-files-fe-common
-        uses: tj-actions/changed-files@v45
+        uses: tj-actions/changed-files@v47
         with:
           files: 'infra/frontend/live/**'
           files_ignore: |
@@ -52,17 +52,17 @@ jobs:
             infra/frontend/live/prod/**/**
       - name: Get changed files from backend-stage
         id: changed-files-be-stage
-        uses: tj-actions/changed-files@v45
+        uses: tj-actions/changed-files@v47
         with:
           files: 'infra/backend/live/stage/**/**'
       - name: Get changed files from backend-prod
         id: changed-files-be-prod
-        uses: tj-actions/changed-files@v45
+        uses: tj-actions/changed-files@v47
         with:
           files: 'infra/backend/live/prod/**/**'
       - name: Get changed files common to the backend
         id: changed-files-be-common
-        uses: tj-actions/changed-files@v45
+        uses: tj-actions/changed-files@v47
         with:
           files: 'infra/backend/live/**/**'
           files_ignore: |
@@ -70,6 +70,6 @@ jobs:
             infra/backend/live/prod/**/**
       - name: Get changed files common to all layers
         id: changed-root
-        uses: tj-actions/changed-files@v45
+        uses: tj-actions/changed-files@v47
         with:
           files: 'infra/root.hcl'
